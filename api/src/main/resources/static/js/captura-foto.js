@@ -1,3 +1,7 @@
+// Captura de foto pela câmera, usada no cadastro e no login. A página precisa ter os
+// elementos com os ids abaixo e chamar configurarCapturaFoto(...) para ser avisada
+// quando a foto muda e quando a câmera falha.
+
 const LARGURA_IDEAL_CAMERA = 640;
 const ALTURA_IDEAL_CAMERA = 480;
 const QUALIDADE_JPEG = 0.9;
@@ -68,7 +72,7 @@ function tirarOutra() {
     ligarCamera();
 }
 
-/** Volta ao estado inicial: sem foto e câmera desligada (usado após o cadastro com sucesso). */
+// Volta ao estado inicial: sem foto e câmera desligada (após o cadastro e ao fechar o popup do login).
 function limparFoto() {
     fotoBase64 = null;
     previewFoto.removeAttribute("src");

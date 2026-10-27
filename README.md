@@ -101,7 +101,7 @@ docker compose ps
 
 - A **primeira** subida demora (≈10 min): a imagem do Python tem ≈3,7 GB por causa do TensorFlow, e os pesos do Facenet (~90 MB) são baixados uma vez só.
 - O banco é criado na primeira subida com `database/create_tables.sql` e `database/seed.sql` (cargos e informações fictícias).
-- Para saber se o reconhecimento facial já está pronto: http://localhost:8000/saude deve responder `{"status":"ok"}`.
+- Para saber se o reconhecimento facial já está pronto: http://localhost:8000/saude (ou a porta do `BIOMETRIA_PORT`) deve responder `{"status":"ok"}`.
 
 ### 3. Usar
 
@@ -170,7 +170,7 @@ Erros sempre no formato `{ "erro": "CODIGO" }` (ex.: `EMAIL_JA_CADASTRADO`, `CRE
 | `POST` | `/encoding` | Imagem → encoding facial (128 números) |
 | `POST` | `/verificar` | Imagem + encoding cadastrado → sucesso e confiança |
 
-Documentação interativa (Swagger): http://localhost:8000/docs. A API Java usa a rede interna do Docker (`http://biometria:8000`), não essa porta.
+Documentação interativa (Swagger): http://localhost:8000/docs (ou a porta do `BIOMETRIA_PORT`). A API Java usa a rede interna do Docker (`http://biometria:8000`), não essa porta.
 
 ---
 

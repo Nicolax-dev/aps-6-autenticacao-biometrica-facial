@@ -55,7 +55,7 @@ public class LoginService {
         this.jsonMapper = jsonMapper;
     }
 
-    //POST /login/credenciais
+    // POST /login/credenciais
     public void conferirCredenciais(CredenciaisRequest request) {
         autenticar(request.email(), request.senha());
     }

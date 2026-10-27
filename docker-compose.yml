@@ -1,0 +1,66 @@
+# Sobe a infraestrutura local do projeto.
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: aps6-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:?defina DB_NAME no .env}
+      POSTGRES_USER: ${DB_USER:?defina DB_USER no .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env}
+    ports:
+      - "127.0.0.1:${DB_PORT:?defina DB_PORT no .env}:5432"
+    volumes:
+      - ./database/create_tables.sql:/docker-entrypoint-initdb.d/01_create_tables.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    
+    # O serviço "api" só sobe quando a resposta for "sim" (healthy).
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  biometria:
+    build: ./biometria-service
+    container_name: aps6-biometria
+    # Igual ao CMD do Dockerfile, mas com --reload: editou o código, recarrega sozinho
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    environment:
+      # Esconde os avisos informativos do TensorFlow  dos logs
+      TF_CPP_MIN_LOG_LEVEL: "2"
+      # Faz o --reload funcionar também para quem está no Windows (arquivos fora do WSL)
+      WATCHFILES_FORCE_POLLING: "true"
+    ports:
+      - "127.0.0.1:${BIOMETRIA_PORT:?defina BIOMETRIA_PORT no .env}:8000"
+    volumes:
+      - ./biometria-service/app:/code/app
+      # Pesos do Facenet (~90 MB) baixados uma vez só, sobrevivem a recriações do container
+      - deepface-pesos:/root/.deepface
+
+  # API . Sem --reload: mudou código Java tem que rebuildar o container.
+  api:
+    build: ./api
+    container_name: aps6-api
+    environment:
+      # Dentro da rede do compose, o banco é "postgres" e a porta é sempre 5432
+      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME:?defina DB_NAME no .env}
+      DB_USER: ${DB_USER:?defina DB_USER no .env}
+      DB_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env}
+      # Nome do serviço na rede interna (não é a porta publicada do .env)
+      BIOMETRIA_URL: http://biometria:8000
+      SPRING_WEB_RESOURCES_STATIC_LOCATIONS: file:/app/static/,classpath:/static/
+      TZ: America/Sao_Paulo
+      
+    ports:
+      - "127.0.0.1:${API_PORT:?defina API_PORT no .env}:8080"
+    volumes:
+      - ./api/src/main/resources/static:/app/static:ro
+    depends_on:
+      postgres:
+        condition: service_healthy   # espera o banco aceitar conexões
+
+volumes:
+  pgdata:
+  deepface-pesos:

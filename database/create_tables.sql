@@ -24,9 +24,9 @@ CREATE TABLE log_acesso (
     usuario_id          INTEGER REFERENCES usuario(id),  -- nullable: nem sempre há usuário identificado
     data_hora           TIMESTAMP NOT NULL DEFAULT now(),
     sucesso             BOOLEAN NOT NULL,
+    -- Gravado porque o cargo pode mudar depois (promoção) e o histórico precisa do nível da época.
     nivel_acesso        SMALLINT
                         CHECK (nivel_acesso IS NULL OR nivel_acesso IN (1, 2, 3)),
-                                -- Fica gravado porque o cargo pode mudar depois (promoção), e o histórico precisa mostrar o nível da época.
     motivo_falha        VARCHAR(100)
                         CHECK (motivo_falha IS NULL OR motivo_falha IN (
                             'CREDENCIAIS_INVALIDAS',
@@ -35,7 +35,7 @@ CREATE TABLE log_acesso (
                             'CONFIANCA_ABAIXO_LIMIAR',
                             'IMAGEM_INVALIDA',
                             'SERVICO_BIOMETRICO_INDISPONIVEL'
-                        )),                               -- lista sincronizada com o contrato Java-Python 
+                        )),                               -- lista sincronizada com o contrato Java-Python
     encoding_confianca  DOUBLE PRECISION
                         CHECK (encoding_confianca IS NULL
                                OR (encoding_confianca >= 0 AND encoding_confianca <= 1)),

@@ -1,6 +1,6 @@
 # Prints — evidências do funcionamento
 
-Prints do item 9 do relatório ("Apresentação do programa em funcionamento").
+Prints do sistema em funcionamento.
 
 > **Sobre as imagens:** esta é a única pasta do repositório com fotos de rosto,
 > e todas mostram apenas o rosto do autor (Nicolas), publicado por decisão própria.

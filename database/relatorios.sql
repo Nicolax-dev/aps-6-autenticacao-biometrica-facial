@@ -1,4 +1,4 @@
-		-- =====================================================================
+-- =====================================================================
 -- relatorios.sql — relatórios do log de acesso.
 --
 -- Consultas somente de leitura (SELECT), para rodar no DBeaver.

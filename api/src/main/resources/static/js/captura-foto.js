@@ -13,7 +13,7 @@ const botaoCapturar = document.getElementById("botao-capturar");
 const botaoTirarOutra = document.getElementById("botao-tirar-outra");
 
 let streamCamera = null;
-let fotoBase64 = null; 
+let fotoBase64 = null;
 
 let aoMudarFoto = () => {};
 let aoErroCamera = () => {};

@@ -243,4 +243,18 @@ O que **não** trata (limitação assumida):
 - 
 
 #### Breno
-- 
+-
+
+* * *
+
+## Uso de IA
+
+O **Nicolas** usou o **Claude** (Anthropic) como ferramenta de apoio no projeto, nas seguintes tarefas:
+
+- **Revisão de texto**: correção de erros de escrita e formatação no código, nos comentários e na documentação.
+- **Revisão técnica**: análise do projeto como um revisor experiente, apontando possíveis problemas de código e de segurança (incluindo uma revisão no estilo pentest).
+- **Orientação de pesquisa**: para cada problema apontado, indicação de caminhos e temas para estudar.
+
+A arquitetura, a lógica, a implementação e os testes foram feitos pela equipe. As correções partiram da nossa pesquisa sobre os problemas apontados; em alguns casos, a correção foi sugerida pela ferramenta e revisada pela equipe. Nenhuma alteração no código foi feita sem antes ser discutida com todos os integrantes.
+
+O Claude aparece na lista de *Contributors* do GitHub porque os commits feitos pela ferramenta recebem automaticamente a linha `Co-Authored-By: Claude`. Esses commits podem ser conferidos no [histórico](https://github.com/Nicolax-dev/aps-6-autenticacao-biometrica-facial/commits/main/).

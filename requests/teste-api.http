@@ -1,0 +1,100 @@
+# =====================================================================
+# Testes da API Java: POST /usuarios (etapa 2).
+# Os testes do login ficam no teste-login.http (etapa 4).
+# Extensão REST Client do VS Code. Porta lida do .env (API_PORT)
+# via requests/.env (link simbólico para o .env da raiz).
+# Antes de rodar:
+#   1. Rodar o teste-service-biometria.http (fotos conferidas)
+#   2. Banco limpo: TRUNCATE usuario RESTART IDENTITY CASCADE;
+#   3. Só o cadastro-eu-ok.json usa nicolas@exemplo.com; os JSONs de erro
+#      usam outro email (senão o Java devolve 409 antes de chamar o Python)
+# Rodar na ordem, um por vez ("Send Request" ou Ctrl+Alt+R).
+# =====================================================================
+
+@api = http://localhost:{{$dotenv API_PORT}}
+
+### 1. Cadastro com sucesso -> 201 (id 1, cargo Analista, nivel_acesso 1)
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-eu-ok.json
+
+### 2. Mesmo cadastro de novo -> 409 EMAIL_JA_CADASTRADO
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-eu-ok.json
+
+### 3. Mesmo email com maiúsculas -> 409 EMAIL_JA_CADASTRADO
+# Prova a normalização do email. A imagem "x" nem chega a ser validada:
+# o email é checado antes (checagens da mais barata para a mais cara)
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"Outro","email":"NICOLAS@Exemplo.COM","senha":"123456","imagem_base64":"x"}
+
+### 4. Campos vazios / senha curta -> 400 DADOS_INVALIDOS
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"","email":"","senha":"1","imagem_base64":""}
+
+### 5. Email sem domínio completo (a@b) -> 400 DADOS_INVALIDOS
+# O @Email padrão do Java aceitaria; a regex igual à do banco recusa
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"Teste","email":"a@b","senha":"123456","imagem_base64":"x"}
+
+### 6. JSON quebrado -> 400 DADOS_INVALIDOS
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"Teste", }
+
+### 7. Não é imagem (texto "ola" em base64) -> 400 IMAGEM_INVALIDA (barrado no Java)
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"Teste","email":"nao-img@exemplo.com","senha":"123456","imagem_base64":"b2xh"}
+
+### 8. "Parece" JPEG mas está corrompido -> 400 IMAGEM_INVALIDA (barrado no Python)
+# Começa com os magic bytes do JPEG (passa no Java), mas o OpenCV não decodifica
+POST {{api}}/usuarios
+Content-Type: application/json
+
+{"nome":"Teste","email":"jpeg-corrompido@exemplo.com","senha":"123456","imagem_base64":"/9j/b2xh"}
+
+### 9. Foto sem rosto -> 422 NENHUM_ROSTO_DETECTADO
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-sem-rosto.json
+
+### 10. Foto com vários rostos -> 422 MULTIPLOS_ROSTOS_DETECTADOS
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-multiplos-rostos.json
+
+### 11. Python DESLIGADO -> 503 SERVICO_BIOMETRICO_INDISPONIVEL (demora ~4s)
+# Com o container parado, o nome "biometria" deixa de resolver na rede do Docker,
+# e a falha só aparece depois dessa tentativa (~4s medidos na etapa 2).
+# Antes: docker compose stop biometria
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-python-off.json
+
+### 12. Python TRAVADO -> 503 SERVICO_BIOMETRICO_INDISPONIVEL (demora ~5s = timeout)
+# "pause" congela o container: a conexão abre, mas o Python nunca responde ->
+# o 503 só volta quando o timeout de 5s estoura. O tempo da resposta é a prova.
+# Antes: docker compose pause biometria
+# Depois: docker compose unpause biometria + teste S do teste-service-biometria.http até dar 200
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-python-off.json
+
+### 13. Rota inexistente -> 404 no formato padrão do Spring (não vira ERRO_INTERNO)
+GET {{api}}/rota-que-nao-existe

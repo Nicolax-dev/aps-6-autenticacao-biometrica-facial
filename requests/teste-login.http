@@ -1,0 +1,222 @@
+# =====================================================================
+# Testes da API Java: login (etapa 4).
+#   POST /login/credenciais e POST /login/verificar, com conferência do log_acesso.
+# Extensão REST Client do VS Code. Porta lida do .env (API_PORT)
+# via requests/.env (link simbólico para o .env da raiz).
+#
+# Antes de rodar:
+#   1. Containers no ar e Python pronto (teste S do teste-service-biometria.http).
+#   2. Banco limpo (zera também o log_acesso, pela FK):
+#        TRUNCATE usuario RESTART IDENTITY CASCADE;
+#   3. JSONs gerados (uma vez só; ficam em biometria-service/fotos/, fora do Git).
+#      O gerar-json-cadastro.sh serve também para o login: o campo "nome" sobra
+#      e o Java ignora.
+#
+# Rodar na ordem, um por vez ("Send Request" ou Ctrl+Alt+R).
+# "log N" = id da linha que o teste cria no log_acesso (conferência linha a linha no fim).
+# =====================================================================
+
+@api = http://localhost:{{$dotenv API_PORT}}
+
+
+# ---------------------------------------------------------------------
+# Parte P — Preparação: três usuários (todos entram como Analista, nível 1)
+# ---------------------------------------------------------------------
+
+### P1. Cadastro do Nicolas -> 201 (id 1)
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-eu-ok.json
+
+### P2. Cadastro do diretor -> 201 (id 2)
+# Mesma foto do Nicolas só para teste: na demonstração seriam pessoas diferentes
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-diretor.json
+
+### P3. Cadastro do ministro -> 201 (id 3)
+POST {{api}}/usuarios
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-ministro.json
+
+# Depois do P3, promover no DBeaver (níveis 2 e 3 não são autoatribuíveis, seção 8.1):
+#   UPDATE usuario SET cargo_id = 2 WHERE email = 'diretor@exemplo.com';
+#   UPDATE usuario SET cargo_id = 3 WHERE email = 'ministro@exemplo.com';
+
+
+# ---------------------------------------------------------------------
+# Parte C — POST /login/credenciais
+# Sucesso não grava log: o log guarda só o resultado final da tentativa.
+# ---------------------------------------------------------------------
+
+### C1. Credenciais certas -> 204, sem corpo, sem log
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"123456"}
+
+### C2. Email com maiúsculas e espaços -> 204 (mesma normalização do cadastro)
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"  NICOLAS@Exemplo.com ","senha":"123456"}
+
+### C3. Senha errada -> 401 CREDENCIAIS_INVALIDAS (log 1: usuario_id 1, nível 1)
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"errada123"}
+
+### C4. Email inexistente -> 401 CREDENCIAIS_INVALIDAS (log 2: usuario_id e nível nulos)
+# Mesma resposta do C3: o usuário não descobre se errou o email ou a senha
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"ninguem@exemplo.com","senha":"123456"}
+
+### C5. Senha com 73 bytes -> 401 CREDENCIAIS_INVALIDAS, não 500 (log 3: usuario_id 1)
+# Acima do limite do BCrypt; essa senha nunca seria aceita no cadastro
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+
+### C6. Conta desativada + senha certa -> 401 CREDENCIAIS_INVALIDAS (log 4: usuario_id 1)
+# Antes, no DBeaver: UPDATE usuario SET ativo = false WHERE id = 1;
+# Depois:            UPDATE usuario SET ativo = true  WHERE id = 1;
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"123456"}
+
+### C7. Campos vazios -> 400 DADOS_INVALIDOS (sem log: requisição malformada não é tentativa)
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email":"","senha":""}
+
+### C8. JSON quebrado -> 400 DADOS_INVALIDOS (sem log)
+POST {{api}}/login/credenciais
+Content-Type: application/json
+
+{"email": }
+
+
+# ---------------------------------------------------------------------
+# Parte V — POST /login/verificar
+# Cada teste grava exatamente uma linha no log (menos o V14).
+# ---------------------------------------------------------------------
+
+### V1. Sucesso com outra foto do Nicolas (sorrindo) -> 200 (log 5: sucesso, confiança ~0.88)
+# Esperado: nome, cargo "Analista", nivel_acesso 1 e 3 informações (todas nível 1)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-eu-sorrindo.json
+
+### V2. Senha errada -> 401 CREDENCIAIS_INVALIDAS (log 6: usuario_id 1). Python não é chamado
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"errada123","imagem_base64":"b2xh"}
+
+### V3. Email inexistente -> 401 CREDENCIAIS_INVALIDAS (log 7: usuario_id e nível nulos)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+{"email":"ninguem@exemplo.com","senha":"123456","imagem_base64":"b2xh"}
+
+### V4. Conta desativada -> 401 CREDENCIAIS_INVALIDAS (log 8: usuario_id 1)
+# Prova que pular o /login/credenciais e chamar o /verificar direto não burla a regra.
+# Antes, no DBeaver: UPDATE usuario SET ativo = false WHERE id = 1;
+# Depois:            UPDATE usuario SET ativo = true  WHERE id = 1;
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-eu-sorrindo.json
+
+### V5. Não é imagem -> 400 IMAGEM_INVALIDA (log 9). Barrado no Java: Python não é chamado
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"123456","imagem_base64":"b2xh"}
+
+### V6. "Parece" JPEG mas está corrompido -> 400 IMAGEM_INVALIDA (log 10). Barrado no Python
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+{"email":"nicolas@exemplo.com","senha":"123456","imagem_base64":"/9j/b2xh"}
+
+### V7. Foto sem rosto -> 422 NENHUM_ROSTO_DETECTADO (log 11)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-sem-rosto.json
+
+### V8. Foto com vários rostos -> 422 MULTIPLOS_ROSTOS_DETECTADOS (log 12)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-multiplos-rostos.json
+
+### V9. Outra pessoa com a senha do Nicolas -> 401 CONFIANCA_ABAIXO_LIMIAR (log 13)
+# O caso que o fator facial existe para barrar: senha vazada, rosto errado
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-outra-pessoa.json
+
+### V10. Python DESLIGADO -> 503 SERVICO_BIOMETRICO_INDISPONIVEL em ~4s (log 14)
+# Com o container parado, o nome "biometria" deixa de resolver na rede do Docker (~4s).
+# Antes: docker compose stop biometria (conferir no docker compose ps)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-eu-sorrindo.json
+
+### V11. Python TRAVADO -> 503 SERVICO_BIOMETRICO_INDISPONIVEL em ~5s = timeout (log 15)
+# Antes: docker compose start biometria, esperar o teste S dar 200, docker compose pause biometria
+# Depois: docker compose unpause biometria + teste S até dar 200
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/login-eu-sorrindo.json
+
+### V12. Diretor (nível 2) -> 200: cargo "Diretor de Divisão", nivel_acesso 2, 6 informações (log 16)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-diretor.json
+
+### V13. Ministro (nível 3) -> 200: cargo "Ministro", nivel_acesso 3, as 9 informações (log 17)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-ministro.json
+
+### V14. Campos vazios -> 400 DADOS_INVALIDOS (sem log)
+POST {{api}}/login/verificar
+Content-Type: application/json
+
+{"email":"","senha":"","imagem_base64":""}
+
+
+# ---------------------------------------------------------------------
+# Parte D — Conferência no DBeaver (depois do V14)
+# ---------------------------------------------------------------------
+#
+# 1) Log linha a linha (esperado: 17 linhas, ver tabela em resultados-testes-etapa4.md):
+#      SELECT l.id, l.usuario_id, u.email, l.data_hora, l.sucesso,
+#             l.nivel_acesso, l.motivo_falha, l.encoding_confianca
+#      FROM log_acesso l
+#      LEFT JOIN usuario u ON u.id = l.usuario_id
+#      ORDER BY l.id;
+#
+# 2) O nível gravado é o da época: rebaixar o ministro e conferir que a linha 17 continua com 3.
+#      UPDATE usuario SET cargo_id = 1 WHERE email = 'ministro@exemplo.com';
+#      SELECT id, nivel_acesso FROM log_acesso WHERE id = 17;   -- continua 3
+#
+# 3) Limpeza: TRUNCATE usuario RESTART IDENTITY CASCADE;

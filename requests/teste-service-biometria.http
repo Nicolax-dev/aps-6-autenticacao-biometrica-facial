@@ -1,0 +1,203 @@
+# =====================================================================
+# Testes do serviço Python (biometria) — direto, sem passar pelo Java.
+# Cobre todas as margens de erro do /encoding e do /verificar (seção 7).
+#
+# Pode testar via Swagger: localhost:N°_porta/docs
+## =====================================================================
+
+@biometria = http://localhost:{{$dotenv BIOMETRIA_PORT}}
+
+### S. Serviço no ar? -> 200 {"status":"ok"}
+GET {{biometria}}/saude
+
+
+# =====================================================================
+# PARTE A — /encoding com fotos reais (sempre 200)
+# =====================================================================
+
+### A1. img_eu.jpg -> sucesso true | quantidade_rostos 1 | encoding com 128 números | erro null
+# IMPORTANTE: rode este antes da Parte D (o encoding dele vira o "cadastrado")
+# @name eu
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-eu-ok.json
+
+### A2. img_euSorrindo.jpg
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-eu-sorrindo.json
+
+### A3. careta.jpg
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-careta.json
+
+### A4. img_semRosto.jpg -> sucesso false | quantidade_rostos 0 | erro NENHUM_ROSTO_DETECTADO
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-sem-rosto.json
+
+### A5. img_multiplosRostos.jpg -> sucesso false | quantidade_rostos = nº real de rostos | erro MULTIPLOS_ROSTOS_DETECTADOS
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-multiplos-rostos.json
+
+### A6. eu.jpg com prefixo "data:image/jpeg;base64," -> sucesso true | quantidade_rostos 1
+# Formato que o navegador manda: prova que o Python remove o prefixo (seção 7)
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/encoding-eu-prefixo.json
+
+### A7. img_outraPessoa.jpg -> sucesso true | quantidade_rostos 1
+# Garante que o rosto é detectado; assim, se o D9 recusar, é por ser OUTRA pessoa
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+< ../biometria-service/fotos/cadastro-outra-pessoa-ok.json
+
+# =====================================================================
+# PARTE B — /encoding com imagem inválida (200, IMAGEM_INVALIDA)
+# Todas: sucesso false | quantidade_rostos 0 | encoding null
+# =====================================================================
+
+### B1. Caracteres fora do base64 -> IMAGEM_INVALIDA
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"@@@@"}
+
+### B2. String vazia -> IMAGEM_INVALIDA
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":""}
+
+### B3. Base64 válido, mas não é imagem (texto "ola") -> IMAGEM_INVALIDA
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"b2xh"}
+
+### B4. Começa como JPEG (/9j/ = FF D8 FF), mas corrompido -> IMAGEM_INVALIDA
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"/9j/b2xh"}
+
+### B5. Quebra de linha ESCAPADA (\n): JSON válido, base64 inválido -> IMAGEM_INVALIDA
+# Comparar com C3: aqui o JSON está certo, quem recusa é a validação do base64
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"b2xh\nb2xh"}
+
+### B6. Só o prefixo, sem conteúdo -> IMAGEM_INVALIDA
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"data:image/jpeg;base64,"}
+
+
+# =====================================================================
+# PARTE C — /encoding com request fora do contrato (422 do FastAPI)
+# Em produção indicaria bug no Java (seção 7)
+# =====================================================================
+
+### C1. Campo imagem_base64 ausente -> 422 (type: missing)
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{}
+
+### C2. JSON quebrado -> 422 (type: json_invalid)
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":}
+
+### C3. Quebra de linha REAL dentro da string -> 422 (type: json_invalid)
+# Erro observado na etapa 1 ao colar base64 no Swagger (seção 7)
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":"b2xh
+b2xh"}
+
+### C4. imagem_base64 com tipo errado (número) -> 422 (type: string_type)
+POST {{biometria}}/encoding
+Content-Type: application/json
+
+{"imagem_base64":123}
+
+
+# =====================================================================
+# PARTE D — /verificar, comparação 1:1 contra o encoding do A1
+# PRÉ-REQUISITO: ter rodado o A1 nesta sessão do VS Code.
+# "<@" = inclui o arquivo processando o marcador {{eu.response.body.$.encoding}}
+# Distâncias: docker compose logs biometria | grep verificar
+# Limiar: distância 0.40 = confiança mínima 0.80 (seção 3.1)
+# =====================================================================
+
+### D1. eu.jpg vs eu (mesma foto) -> sucesso true | confiança ~1.0 (distância ~0)
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-eu.json
+
+### D2. euSorrindo.jpg vs eu -> sucesso true | confiança >= 0.80 (etapa 1: 0.8822)
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-eu-sorrindo.json
+
+### D3. careta.jpg vs eu -> REGISTRAR O OBTIDO
+# Etapa 1: CONFIANCA_ABAIXO_LIMIAR (distância 0.5820, confiança 0.7090),
+# ou NENHUM_ROSTO_DETECTADO se o detector não achar o rosto
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-careta.json
+
+### D4. semRosto.jpg vs eu -> sucesso false | confianca null | erro NENHUM_ROSTO_DETECTADO
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-sem-rosto.json
+
+### D5. multiplosRostos.jpg vs eu -> sucesso false | erro MULTIPLOS_ROSTOS_DETECTADOS
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-multiplos-rostos.json
+
+### D6. Imagem inválida + encoding válido -> sucesso false | erro IMAGEM_INVALIDA
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+{"imagem_base64":"b2xh","encoding_cadastrado":{{eu.response.body.$.encoding}}}
+
+### D7. encoding_cadastrado com tamanho errado (1 número em vez de 128) -> 422 (too_short)
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+{"imagem_base64":"b2xh","encoding_cadastrado":[0.1]}
+
+### D8. Sem encoding_cadastrado -> 422 (type: missing)
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+{"imagem_base64":"b2xh"}
+
+### D9. outraPessoa.jpg vs eu -> sucesso false | confianca null | erro CONFIANCA_ABAIXO_LIMIAR
+# Teste C da etapa 1 (distância nunca registrada): esperado distância > 0.40.
+# Prova que o sistema recusa uma pessoa diferente, não só fotos ruins.
+POST {{biometria}}/verificar
+Content-Type: application/json
+
+<@ ../biometria-service/fotos/verificar-outra-pessoa.json

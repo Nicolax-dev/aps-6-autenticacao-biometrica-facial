@@ -28,7 +28,7 @@ services:
     # Igual ao CMD do Dockerfile, mas com --reload: editou o código, recarrega sozinho
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     environment:
-      # Esconde os avisos informativos do TensorFlow  dos logs
+      # Esconde os avisos informativos do TensorFlow dos logs
       TF_CPP_MIN_LOG_LEVEL: "2"
       # Faz o --reload funcionar também para quem está no Windows (arquivos fora do WSL)
       WATCHFILES_FORCE_POLLING: "true"
@@ -39,7 +39,7 @@ services:
       # Pesos do Facenet (~90 MB) baixados uma vez só, sobrevivem a recriações do container
       - deepface-pesos:/root/.deepface
 
-  # API . Sem --reload: mudou código Java tem que rebuildar o container.
+  # API. Sem --reload: mudou código Java tem que rebuildar o container.
   api:
     build: ./api
     container_name: aps6-api

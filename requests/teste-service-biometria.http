@@ -1,6 +1,6 @@
 # =====================================================================
 # Testes do serviço Python (biometria) — direto, sem passar pelo Java.
-# Cobre todas as margens de erro do /encoding e do /verificar (seção 7).
+# Cobre todas as margens de erro do /encoding e do /verificar 
 #
 # Pode testar via Swagger: localhost:N°_porta/docs
 ## =====================================================================
@@ -48,7 +48,7 @@ Content-Type: application/json
 < ../biometria-service/fotos/cadastro-multiplos-rostos.json
 
 ### A6. eu.jpg com prefixo "data:image/jpeg;base64," -> sucesso true | quantidade_rostos 1
-# Formato que o navegador manda: prova que o Python remove o prefixo (seção 7)
+# Formato que o navegador manda: prova que o Python remove o prefixo
 POST {{biometria}}/encoding
 Content-Type: application/json
 
@@ -106,7 +106,7 @@ Content-Type: application/json
 
 # =====================================================================
 # PARTE C — /encoding com request fora do contrato (422 do FastAPI)
-# Em produção indicaria bug no Java (seção 7)
+# Em produção indicaria bug no Java 
 # =====================================================================
 
 ### C1. Campo imagem_base64 ausente -> 422 (type: missing)
@@ -122,7 +122,7 @@ Content-Type: application/json
 {"imagem_base64":}
 
 ### C3. Quebra de linha REAL dentro da string -> 422 (type: json_invalid)
-# Erro observado na etapa 1 ao colar base64 no Swagger (seção 7)
+# Erro observado na etapa 1 ao colar base64 no Swagger 
 POST {{biometria}}/encoding
 Content-Type: application/json
 
@@ -141,7 +141,7 @@ Content-Type: application/json
 # PRÉ-REQUISITO: ter rodado o A1 nesta sessão do VS Code.
 # "<@" = inclui o arquivo processando o marcador {{eu.response.body.$.encoding}}
 # Distâncias: docker compose logs biometria | grep verificar
-# Limiar: distância 0.40 = confiança mínima 0.80 (seção 3.1)
+# Limiar: distância 0.40 = confiança mínima 0.80 
 # =====================================================================
 
 ### D1. eu.jpg vs eu (mesma foto) -> sucesso true | confiança ~1.0 (distância ~0)

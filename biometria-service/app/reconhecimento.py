@@ -77,7 +77,7 @@ def distancia_cosseno(a: list[float], b: list[float]) -> float:
 
 
 def distancia_para_confianca(distancia: float) -> float:
-    """Converte para 0..1, 'quanto maior, melhor' (seção 3.1). Truncada nos limites."""
+    """Converte para 0..1, 'quanto maior, melhor'. Truncada nos limites."""
     return max(0.0, min(1.0, 1 - distancia / 2))
 
 

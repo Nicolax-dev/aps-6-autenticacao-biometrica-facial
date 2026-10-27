@@ -21,5 +21,5 @@ COPY app ./app
 
 EXPOSE 8000
 
-# Comando padrão. No compose (item 3) ele é trocado pela versão com --reload
+# Comando padrão. No compose ele é trocado pela versão com --reload
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

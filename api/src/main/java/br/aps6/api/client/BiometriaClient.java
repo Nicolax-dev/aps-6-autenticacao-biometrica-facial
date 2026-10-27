@@ -90,7 +90,7 @@ public class BiometriaClient {
         return confianca;
     }
 
-    // POST com JSON. Qualquer falha técnica
+    // POST com JSON. Qualquer falha técnica vira SERVICO_BIOMETRICO_INDISPONIVEL”
     private <T> T chamar(String endpoint, Object corpo, Class<T> tipoResposta) {
         T resposta;
         try {

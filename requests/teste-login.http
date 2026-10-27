@@ -42,7 +42,7 @@ Content-Type: application/json
 
 < ../biometria-service/fotos/cadastro-ministro.json
 
-# Depois do P3, promover no DBeaver (níveis 2 e 3 não são autoatribuíveis, seção 8.1):
+# Depois do P3, promover no DBeaver (níveis 2 e 3 não são autoatribuíveis):
 #   UPDATE usuario SET cargo_id = 2 WHERE email = 'diretor@exemplo.com';
 #   UPDATE usuario SET cargo_id = 3 WHERE email = 'ministro@exemplo.com';
 

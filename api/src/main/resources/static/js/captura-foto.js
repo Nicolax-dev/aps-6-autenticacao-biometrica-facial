@@ -1,9 +1,3 @@
-// Volta ao estado inicial: sem foto e câmera desligada (após o cadastro e ao fechar o popup do login).
-// Não existe envio de arquivo: a foto vem sempre da câmera (contexto, seção 3).
-//
-// A página que usa este arquivo precisa ter os elementos com os ids abaixo e chamar
-// configurarCapturaFoto(...) para saber quando a foto muda e quando a câmera falha.
-
 const LARGURA_IDEAL_CAMERA = 640;
 const ALTURA_IDEAL_CAMERA = 480;
 const QUALIDADE_JPEG = 0.9;

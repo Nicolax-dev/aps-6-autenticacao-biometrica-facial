@@ -1,4 +1,4 @@
-"""Formato dos requests e responses (contrato da seção 7 do contexto)."""
+"""Formato dos requests e responses."""
 
 from typing import Annotated
 

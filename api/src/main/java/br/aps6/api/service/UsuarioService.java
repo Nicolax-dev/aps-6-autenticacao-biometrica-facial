@@ -20,10 +20,6 @@ import br.aps6.api.repository.CargoRepository;
 import br.aps6.api.repository.UsuarioRepository;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Regra do cadastro
- */
-
 @Service
 public class UsuarioService {
 

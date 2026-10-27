@@ -86,8 +86,6 @@ public class LoginService {
         return LoginResponse.de(usuario, informacoes);
     }
 
-
-    
     Usuario autenticar(String emailDigitado, String senha) {
         String email = emailDigitado.trim().toLowerCase();
 

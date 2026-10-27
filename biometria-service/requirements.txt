@@ -1,0 +1,13 @@
+# Servidor web
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+
+# Reconhecimento facial
+deepface==0.0.93
+
+# Motor de rede neural usado pelo DeepFace (Facenet roda em TensorFlow)
+tensorflow==2.17.1
+tf-keras==2.17.0
+
+# Fixado em 1.x: o TensorFlow 2.17 não é compatível com numpy 2
+numpy==1.26.4

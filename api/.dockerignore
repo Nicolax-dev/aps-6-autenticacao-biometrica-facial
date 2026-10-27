@@ -1,4 +1,4 @@
-# Não entra na imagem: build local da extensão do VS Code, configs locais e de IDE
+# Não entra na imagem: build local do Maven, configs locais e de IDE
 
 target/
 .env

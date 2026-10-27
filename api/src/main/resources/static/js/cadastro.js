@@ -16,7 +16,7 @@ const campos = {
     confirmarSenha: document.getElementById("confirmar-senha"),
 };
 
-let enviando = false; 
+let enviando = false;
 
 // ---------- Mensagens na tela ----------
 
@@ -132,7 +132,7 @@ async function enviarCadastro() {
         } else {
             console.warn("Cadastro recusado:", resposta.status, corpo?.erro);
             mostrarErroGeral(mensagemDoErro(corpo?.erro));
-            }
+        }
     } finally {
         definirEnviando(false);
     }
@@ -143,7 +143,7 @@ function cadastroConcluido(usuario) {
         `Cadastro realizado, ${usuario.nome}! ` +
         `Você entrou como ${usuario.cargo} (nível ${usuario.nivel_acesso}).`
     );
-    formulario.reset(); 
+    formulario.reset();
     limparFoto();
     divSucessoCadastro.scrollIntoView({ behavior: "smooth" });
 }
@@ -162,7 +162,7 @@ for (const nome in campos) {
 }
 
 formulario.addEventListener("submit", (evento) => {
-    evento.preventDefault(); 
+    evento.preventDefault();
 
     if (enviando || obterFoto() === null) {
         return;

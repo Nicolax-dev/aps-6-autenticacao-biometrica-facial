@@ -45,7 +45,7 @@ Os logs do container (distância, confiança e limiar de cada `/verificar`) tamb
 |---|---|
 | O encoding trafega pela rede interna a cada login | São 128 números (poucos KB), na rede interna do Docker, desprezível perto da própria imagem. |
 | O Java precisa buscar o encoding antes de chamar o Python | É uma consulta por email, que o Java já faz para conferir a senha. |
-| O Python não consegue identificar alguém sozinho (1:N) | O sistema foi desenhado como 1:1 de propósito (login como filtro de entrada; contexto, seção 4.1). |
+| O Python não consegue identificar alguém sozinho (1:N) | O sistema foi desenhado como 1:1 de propósito (login como filtro de entrada). |
 | Os logs de distância se perdem ao recriar o container | São evidência de calibração, não dado do sistema; o que importa (resultado e confiança) fica no `log_acesso`. |
 
 ## 4. Alternativas descartadas

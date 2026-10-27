@@ -74,8 +74,8 @@ Serviço de biometria (Python + FastAPI + DeepFace)
 ### 1. Configurar
 
 ```bash
-git clone <https://github.com/Nicolax-dev/aps-6-autenticacao-biometrica-facial>
-cd <pasta-do-repositorio>
+git clone https://github.com/Nicolax-dev/aps-6-autenticacao-biometrica-facial.git
+cd aps-6-autenticacao-biometrica-facial
 cp .env.example .env
 ```
 
@@ -144,7 +144,7 @@ Mais comandos (geração dos JSONs de teste, Swagger) em [docs/markdown/comando.
 ```bash
 docker compose down
 docker volume ls                        # procure o volume que termina em _pgdata
-docker volume rm <nome-do-volume>_pgdata
+docker volume rm <nome-do-volume>
 docker compose up -d
 ```
 
@@ -204,6 +204,8 @@ O que **não** trata (limitação assumida):
 
 - **Ataque de apresentação**: uma foto impressa ou a tela de um celular mostrada para a webcam pode ser aceita. A proteção seria **detecção de vivacidade**, fora do escopo: ver [docs/markdown/deteccao-de-vivacidade.md](docs/markdown/deteccao-de-vivacidade.md).
 - O reconhecimento exige rosto de frente, boa iluminação e expressão natural: uma careta exagerada pode ser rejeitada mesmo sendo o próprio usuário.
+- **Descoberta de emails pelo tempo de resposta**: um email inexistente é recusado mais rápido que um existente, porque nesse caso o BCrypt não roda. Medindo o tempo, dá para saber quais emails estão cadastrados, mesmo com a mensagem genérica.
+- **Sem limite de tentativas**: não há bloqueio de conta nem atraso progressivo depois de várias falhas de login.
 
 ---
 
@@ -221,7 +223,7 @@ O que **não** trata (limitação assumida):
 │       └── resources/static/   ← telas: index, cadastro e login
 ├── requests/                   ← roteiros de teste (REST Client)
 ├── scripts/                    ← geram os JSONs de teste a partir das fotos
-└── docs/                       ← decisões de arquitetura, resultados dos testes, guia do trabalho
+└── docs/                       ← decisões de arquitetura e resultados dos testes
 ```
 
 ---

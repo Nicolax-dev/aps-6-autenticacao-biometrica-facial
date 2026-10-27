@@ -30,7 +30,7 @@ const tituloSaudacao = document.getElementById("saudacao");
 const listaInformacoes = document.getElementById("lista-informacoes");
 const botaoSair = document.getElementById("botao-sair");
 
-let enviando = false; 
+let enviando = false;
 
 // ---------- Mensagens na tela ----------
 
@@ -129,7 +129,6 @@ function definirEnviandoVerificacao(ativo) {
     botaoCancelar.disabled = ativo;
 }
 
-
 async function conferirCredenciais() {
     mostrarMensagem(divErroLogin, null);
     definirEnviandoCredenciais(true);
@@ -224,7 +223,7 @@ function criarItemInformacao(informacao) {
 
 function loginConcluido(usuario) {
     popupFoto.close();
-    formLogin.reset();  
+    formLogin.reset();
 
     tituloSaudacao.textContent =
         `Olá, ${usuario.nome}! Seu cargo: ${usuario.cargo} (nível ${usuario.nivel_acesso}).`;

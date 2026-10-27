@@ -59,7 +59,7 @@ def gerar_encoding(imagem: np.ndarray) -> list[float]:
             img_path=imagem,
             model_name=MODEL_NAME,
             detector_backend=DETECTOR_BACKEND,
-            enforce_detection=True,  
+            enforce_detection=True,
         )
     except ValueError:
         raise ErroBiometria("NENHUM_ROSTO_DETECTADO", quantidade_rostos=0)

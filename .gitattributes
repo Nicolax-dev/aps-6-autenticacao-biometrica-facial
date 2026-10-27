@@ -1,0 +1,13 @@
+# Padroniza quebra de linha em LF (Linux/WSL e Windows iguais no repositório)
+* text=auto eol=lf
+
+# Scripts de Windows precisam de CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binários: nunca converter
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.jar  binary

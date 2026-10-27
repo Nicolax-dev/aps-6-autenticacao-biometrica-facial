@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Java / Maven
+target/
+*.class
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente locais
+.env
+
+api/target/
+biometria-service/fotos/
+requests/.env
+
+*.docx
+
+docs/guia-do-trabalho.pdf

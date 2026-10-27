@@ -1,0 +1,7 @@
+# Não entra na imagem: build local da extensão do VS Code, configs locais e de IDE
+
+target/
+.env
+.idea/
+.vscode/
+*.iml

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cadastro — APS6</title>
+    <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+    <main class="cartao">
+        <h1>Cadastro</h1>
+
+        <form id="form-cadastro" novalidate>
+
+            <div id="sucesso-cadastro" class="sucesso" hidden></div>
+
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" maxlength="150" autocomplete="name">
+                <small id="erro-nome" class="erro-campo"></small>
+            </div>
+
+            <div class="campo">
+                <label for="email">Email</label>
+                <input type="email" id="email" maxlength="150" autocomplete="email">
+                <small id="erro-email" class="erro-campo"></small>
+            </div>
+
+            <div class="campo">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" autocomplete="new-password">
+                <small id="erro-senha" class="erro-campo"></small>
+            </div>
+
+            <div class="campo">
+                <label for="confirmar-senha">Confirmar senha</label>
+                <input type="password" id="confirmar-senha" autocomplete="new-password">
+                <small id="erro-confirmar-senha" class="erro-campo"></small>
+            </div>
+
+                        <div class="campo">
+                <label>Foto</label>
+                <div class="captura-foto">
+                    <p class="dica">Olhe para a câmera, com expressão neutra e boa iluminação.</p>
+
+                    <video id="video-camera" autoplay playsinline muted hidden></video>
+                    <img id="preview-foto" alt="Foto capturada" hidden>
+
+                    <div class="acoes">
+                        <button type="button" id="botao-ligar-camera" class="botao">Ligar câmera</button>
+                        <button type="button" id="botao-capturar" class="botao" hidden>Tirar foto</button>
+                        <button type="button" id="botao-tirar-outra" class="botao secundario" hidden>Tirar outra</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="erro-cadastro" class="erro-geral" hidden></div>
+
+            <button type="submit" id="botao-cadastrar" class="botao" disabled>Cadastrar</button>
+        </form>
+
+        <p><a href="login.html">Ir para o login</a> · <a href="index.html">Voltar ao início</a></p>
+    </main>
+
+    <!-- No fim do <body>: quando o script roda, o formulário acima já existe na página -->
+    <!-- Ordem importa: cada arquivo usa o que os anteriores definiram -->
+    <script src="js/mensagens.js"></script>
+    <script src="js/captura-foto.js"></script>
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

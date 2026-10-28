@@ -230,20 +230,37 @@ O que **não** trata (limitação assumida):
 
 ## Equipe
 
-- ***Nicolas*** - [linkedin.com]() 
-- ***Antonio*** - [linkedin.com]()
-- ***Breno*** - [linkedin.com]()
+- ***Nicolas*** - [linkedin.com](https://www.linkedin.com/in/nicolas-borges-dev/) 
+- ***Antonio*** - [linkedin.com](https://www.linkedin.com/in/antonio-augusto-lazarini-benvindo-721578428/)
+- ***Breno*** - [linkedin.com](https://www.linkedin.com/in/breno-henrique-rodrigues-da-silva/)
 
 ### Responsabilidades
 
-#### Nicolas
--
+#### Nicolas (líder técnico e desenvolvimento)
+- Coordenação da equipe e planejamento das etapas de implementação
+- Definição da arquitetura (Java + Python via REST, Python stateless) e das decisões técnicas
+- Desenvolvimento do serviço de biometria em Python (FastAPI + DeepFace)
+- Desenvolvimento da API em Java (Spring Boot): cadastro, login, validações e tratamento de erros
+- Apoio no desenvolvimento do frontend
+- Modelagem do banco de dados PostgreSQL e ambiente Docker Compose
+- Roteiros de teste e documentação técnica dentro do repositório
 
-#### Antonio
-- 
+#### Breno (suporte ao desenvolvimento)
+- Desenvolvimento do frontend (HTML, CSS e JavaScript), incluindo a captura pela webcam
+- Apoio na execução dos testes manuais (API, navegador e câmera)
+- Revisão das funcionalidades e sugestões de melhoria
+- Apoio na validação do reconhecimento facial com fotos reais
+- Suporte na preparação da apresentação:
+   -  Testou as telas
+   -  Revisou o código
+   -  Ajudou a resolver erros durente a construção do projeto
 
-#### Breno
--
+#### Antonio (documentação acadêmica)
+- Revisão das funcionalidades e sugestões de melhoria
+- Elaboração e organização do relatório entregue ao professor
+- Adaptação do conteúdo técnico do projeto para o documento final
+- Formatação e revisão do relatório conforme as normas exigidas
+- Registro dos resultados dos testes e das limitações conhecidas no relatório
 
 * * *
 

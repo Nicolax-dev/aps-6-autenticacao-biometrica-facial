@@ -13,6 +13,16 @@ Sistema que restringe o acesso a informações estratégicas de um banco de dado
 
 Cada usuário vê as informações **até o nível do seu cargo**: o ministro vê tudo, o analista só o nível 1. Todas as informações do banco são **fictícias**.
 
+<br>
+
+## Demonstração
+
+Cadastro pela webcam, login como Analista e como Ministro (com uma tentativa recusada antes):
+
+https://github.com/user-attachments/assets/0793436d-4850-4b09-aba7-bbbbbbf4e62e
+
+<br>
+
 ---
 
 ## Como funciona

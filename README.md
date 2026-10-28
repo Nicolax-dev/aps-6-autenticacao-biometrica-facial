@@ -245,15 +245,13 @@ O que **não** trata (limitação assumida):
 - Modelagem do banco de dados PostgreSQL e ambiente Docker Compose
 - Roteiros de teste e documentação técnica dentro do repositório
 
-#### Breno (suporte ao desenvolvimento)
+#### Breno (frontend e suporte ao desenvolvimento)
 - Desenvolvimento do frontend (HTML, CSS e JavaScript), incluindo a captura pela webcam
-- Apoio na execução dos testes manuais (API, navegador e câmera)
-- Revisão das funcionalidades e sugestões de melhoria
+- Execução dos testes manuais das telas, da API e da câmera
+- Revisão do código e das funcionalidades, com sugestões de melhoria
+- Apoio na resolução de erros durante a construção do projeto
 - Apoio na validação do reconhecimento facial com fotos reais
-- Suporte na preparação da apresentação:
-   -  Testou as telas
-   -  Revisou o código
-   -  Ajudou a resolver erros durente a construção do projeto
+- Suporte na preparação da apresentação
 
 #### Antonio (documentação acadêmica)
 - Revisão das funcionalidades e sugestões de melhoria

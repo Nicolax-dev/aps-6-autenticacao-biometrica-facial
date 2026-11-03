@@ -19,7 +19,7 @@ Cada usuário vê as informações **até o nível do seu cargo**: o ministro v�
 
 Cadastro pela webcam, login como Analista e como Ministro (com uma tentativa recusada antes):
 
-https://github.com/user-attachments/assets/0793436d-4850-4b09-aba7-bbbbbbf4e62e
+https://github.com/user-attachments/assets/d9397fa2-a6ea-4f2a-bc0d-47c2cc01f987
 
 <br>
 

@@ -1,9 +1,12 @@
-// Captura de foto pela câmera, usada no cadastro e no login. A página precisa ter os
-// elementos com os ids abaixo e chamar configurarCapturaFoto(...) para ser avisada
-// quando a foto muda e quando a câmera falha.
+// Volta ao estado inicial: sem foto e câmera desligada (após o cadastro e ao fechar o popup do login).
+// Não existe envio de arquivo: a foto vem sempre da câmera (contexto, seção 3).
+//
+// A página que usa este arquivo precisa ter os elementos com os ids abaixo e chamar
+// configurarCapturaFoto(...) para saber quando a foto muda e quando a câmera falha.
 
 const LARGURA_IDEAL_CAMERA = 640;
 const ALTURA_IDEAL_CAMERA = 480;
+// 0.9 = boa qualidade com arquivo pequeno (~50–150 KB), muito abaixo dos 5MB aceitos pelo Java
 const QUALIDADE_JPEG = 0.9;
 
 const videoCamera = document.getElementById("video-camera");
@@ -12,9 +15,10 @@ const botaoLigarCamera = document.getElementById("botao-ligar-camera");
 const botaoCapturar = document.getElementById("botao-capturar");
 const botaoTirarOutra = document.getElementById("botao-tirar-outra");
 
-let streamCamera = null;
-let fotoBase64 = null;
+let streamCamera = null; // conexão aberta com a câmera (null = desligada)
+let fotoBase64 = null;   // foto capturada, no formato "data:image/jpeg;base64,..." (null = sem foto)
 
+// Funções avisadas pela página (preenchidas em configurarCapturaFoto)
 let aoMudarFoto = () => {};
 let aoErroCamera = () => {};
 
@@ -23,6 +27,7 @@ function configurarCapturaFoto(funcoes) {
     aoErroCamera = funcoes.aoErroCamera;
 }
 
+/** Devolve a foto capturada (data URL JPEG) ou null. */
 function obterFoto() {
     return fotoBase64;
 }
@@ -72,7 +77,7 @@ function tirarOutra() {
     ligarCamera();
 }
 
-// Volta ao estado inicial: sem foto e câmera desligada (após o cadastro e ao fechar o popup do login).
+/** Volta ao estado inicial: sem foto e câmera desligada (usado após o cadastro com sucesso). */
 function limparFoto() {
     fotoBase64 = null;
     previewFoto.removeAttribute("src");

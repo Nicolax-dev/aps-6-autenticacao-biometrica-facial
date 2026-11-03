@@ -3,77 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login — APS6</title>
+    <title>Entrar — APS6</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&display=swap">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
-    <main class="cartao">
 
-        <section id="tela-login">
-            <h1>Entrar</h1>
+    <!-- ===== Etapa 1: email e senha ===== -->
+    <div id="tela-login" class="acesso">
 
-            <form id="form-login" novalidate>
+        <aside class="painel-lateral compacto">
+            <a href="index.html" class="marca">
+                <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0b6e75"/><path d="M20 9c5 6 8 10.5 8 14.5a8 8 0 0 1-16 0C12 19.5 15 15 20 9z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M16.5 24.5a3.5 3.5 0 0 0 3.5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="marca-textos">
+                    <span class="marca-nome">Ministério do Meio Ambiente</span>
+                    <span class="marca-sub">Base de propriedades rurais</span>
+                </span>
+            </a>
 
-                <div id="erro-login" class="erro-geral" hidden></div>
+            <div class="painel-meio">
+                <p class="painel-titulo">Acesso restrito com senha e reconhecimento facial</p>
 
-                <div class="campo">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" autocomplete="username">
-                    <small id="erro-email" class="erro-campo"></small>
+                <!-- A etapa em andamento muda pelo CSS quando o popup da foto abre -->
+                <ol class="etapas">
+                    <li class="etapa etapa-1">
+                        <span class="etapa-numero">
+                            <span>1</span>
+                            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>
+                        </span>
+                        <span class="etapa-textos">
+                            <span class="etapa-nome">Email e senha</span>
+                            <span class="etapa-descricao">Conferimos se a conta existe e se a senha está certa.</span>
+                        </span>
+                    </li>
+                    <li class="etapa etapa-2">
+                        <span class="etapa-numero"><span>2</span></span>
+                        <span class="etapa-textos">
+                            <span class="etapa-nome">Foto pela webcam</span>
+                            <span class="etapa-descricao">Seu rosto é comparado com o do cadastro. Só então as informações do seu cargo aparecem.</span>
+                        </span>
+                    </li>
+                </ol>
+            </div>
+
+            <p class="nota-ficticia">Projeto acadêmico APS6, UNIP. Todas as informações do banco são fictícias.</p>
+        </aside>
+
+        <main class="area-principal">
+            <div class="bloco-form">
+                <div class="cabecalho-form">
+                    <span class="etapa-atual">Etapa 1 de 2</span>
+                    <h1 class="titulo-pagina">Entrar</h1>
+                    <p class="texto-apoio">Use o email e a senha do seu cadastro.</p>
                 </div>
 
-                <div class="campo">
-                    <label for="senha">Senha</label>
-                    <input type="password" id="senha" autocomplete="current-password">
-                    <small id="erro-senha" class="erro-campo"></small>
+                <!-- desliga os balões do navegador;-->
+                <form id="form-login" class="formulario" novalidate>
+
+                    <div id="erro-login" class="erro-geral" role="alert" hidden></div>
+
+                    <div class="campo">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" autocomplete="username">
+                        <small id="erro-email" class="erro-campo"></small>
+                    </div>
+
+                    <div class="campo">
+                        <label for="senha">Senha</label>
+                        <div class="campo-senha">
+                            <input type="password" id="senha" autocomplete="current-password">
+                            <!-- Mostrar/ocultar senha -->
+                            <button type="button" class="botao-mostrar-senha" data-mostrar-senha="senha" aria-label="Mostrar senha" aria-pressed="false">
+                                <svg class="icone olho-aberto" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <svg class="icone olho-fechado" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1"/><path d="M6.6 6.6C3.7 8.5 2 12 2 12s3.5 7 10 7c1.9 0 3.5-.6 4.9-1.4"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                            </button>
+                        </div>
+                        <small id="erro-senha" class="erro-campo"></small>
+                    </div>
+
+                    <button type="submit" id="botao-continuar" class="botao largo">Continuar</button>
+                </form>
+
+                <div class="rodape-form">
+                    <span>Ainda não tem acesso? <a href="cadastro.html">Criar cadastro</a></span>
+                    <span>Todo cadastro novo entra como Analista (nível 1).</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== Depois do login: informações liberadas pelo cargo ===== -->
+    <div id="tela-resultado" hidden>
+
+        <header class="topo">
+            <div class="topo-conteudo">
+                <span class="marca">
+                    <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0b6e75"/><path d="M20 9c5 6 8 10.5 8 14.5a8 8 0 0 1-16 0C12 19.5 15 15 20 9z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M16.5 24.5a3.5 3.5 0 0 0 3.5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+                    <span class="marca-nome">Base de propriedades rurais</span>
+                </span>
+
+                <div class="topo-usuario">
+                    <span class="usuario-nome">
+                        <span id="inicial-usuario" class="usuario-inicial" aria-hidden="true"></span>
+                        <span class="usuario-textos">
+                            <span id="nome-usuario-topo" class="texto-nome"></span>
+                            <span id="cargo-usuario-topo" class="usuario-cargo"></span>
+                        </span>
+                    </span>
+                    <button type="button" id="botao-sair" class="botao claro">
+                        <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/></svg>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="boas-vindas">
+            <div class="boas-vindas-conteudo">
+                <div class="boas-vindas-textos">
+                    <h1 id="saudacao" tabindex="-1"></h1>
+                    <p>Identidade confirmada. Seu cargo é <strong id="texto-cargo"></strong> e você vê as informações até o nível <strong id="texto-nivel"></strong>.</p>
                 </div>
 
-                <button type="submit" id="botao-continuar" class="botao">Continuar</button>
-            </form>
-
-            <p><a href="cadastro.html">Criar cadastro</a> · <a href="index.html">Voltar ao início</a></p>
-        </section>
-
-        <section id="tela-resultado" hidden>
-            <h1 id="saudacao"></h1>
-
-            <h2 class="subtitulo">Informações disponíveis</h2>
-            <ul id="lista-informacoes" class="lista-informacoes"></ul>
-
-            <div class="acoes">
-                <button type="button" id="botao-sair" class="botao secundario">Sair</button>
+                <div class="medidor" aria-hidden="true">
+                    <span class="medidor-titulo">Seu nível de acesso</span>
+                    <div class="degraus">
+                        <div class="degrau degrau-1">
+                            <div class="degrau-barra"></div>
+                            <span class="degrau-nivel">Nível 1</span>
+                            <span class="degrau-cargo">Analista</span>
+                        </div>
+                        <div class="degrau degrau-2">
+                            <div class="degrau-barra"></div>
+                            <span class="degrau-nivel">Nível 2</span>
+                            <span class="degrau-cargo">Diretor de Divisão</span>
+                        </div>
+                        <div class="degrau degrau-3">
+                            <div class="degrau-barra"></div>
+                            <span class="degrau-nivel">Nível 3</span>
+                            <span class="degrau-cargo">Ministro</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-    </main>
 
-    <dialog id="popup-foto" class="popup">
-        <h2>Confirme sua identidade</h2>
+        <main class="conteudo-logado">
+            <div id="lista-informacoes" class="grupos-informacoes"></div>
+        </main>
+    </div>
+
+    <!-- ===== Etapa 2: foto (popup) ===== -->
+    <dialog id="popup-foto" class="popup" aria-labelledby="titulo-popup">
+        <div class="cabecalho-form">
+            <span class="etapa-atual">Etapa 2 de 2</span>
+            <h2 id="titulo-popup">Confirme que é você</h2>
+            <p class="dica">Olhe para a câmera com expressão neutra, em um lugar bem iluminado.</p>
+        </div>
 
         <div class="captura-foto">
-            <p class="dica">Olhe para a câmera, com expressão neutra e boa iluminação.</p>
+            <!-- Estado inicial-->
+            <div class="captura-vazia">
+                <span class="silhueta">
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="4"/><path d="M4.5 20c1.2-3.6 4-5.5 7.5-5.5s6.3 1.9 7.5 5.5"/></svg>
+                </span>
+                <p class="dica">Ligue a câmera e encaixe o rosto na moldura. Na primeira vez, o navegador pede permissão.</p>
+            </div>
 
-            <video id="video-camera" autoplay playsinline muted hidden></video>
-            <img id="preview-foto" alt="Foto capturada" hidden>
+            <div class="visor">
+                <video id="video-camera" autoplay playsinline muted hidden></video>
+                <img id="preview-foto" alt="Foto capturada" hidden>
+                <!-- Varredura animada dentro da moldura -->
+                <div class="varredura" aria-hidden="true"><span class="varredura-linha"></span></div>
+                <!-- Moldura oval -->
+                <div class="moldura" aria-hidden="true">
+                    <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+                        <path d="M0 0h400v300H0z M200 48a80 102 0 1 0 0.1 0z" fill="rgba(10,22,35,0.5)" fill-rule="evenodd"/>
+                        <ellipse cx="200" cy="150" rx="80" ry="102" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="10 8" vector-effect="non-scaling-stroke"/>
+                    </svg>
+                    <span class="moldura-legenda">Encaixe o rosto na moldura</span>
+                </div>
+            </div>
 
             <div class="acoes">
-                <button type="button" id="botao-ligar-camera" class="botao">Ligar câmera</button>
-                <button type="button" id="botao-capturar" class="botao" hidden>Tirar foto</button>
+                <button type="button" id="botao-ligar-camera" class="botao escuro">
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                    Ligar câmera
+                </button>
+                <button type="button" id="botao-capturar" class="botao escuro" hidden>
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                    Tirar foto
+                </button>
                 <button type="button" id="botao-tirar-outra" class="botao secundario" hidden>Tirar outra</button>
             </div>
         </div>
 
-        <div id="erro-popup" class="erro-geral" hidden></div>
+        <div id="erro-popup" class="erro-geral" role="alert" hidden></div>
 
         <div class="acoes">
-            <button type="button" id="botao-cancelar" class="botao secundario">Cancelar</button>
-            <!-- Desabilitado até existir uma foto capturada -->
+            <button type="button" id="botao-cancelar" class="botao voltar">
+                <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M11 6l-6 6 6 6"/></svg>
+                Voltar ao email e senha
+            </button>
             <button type="button" id="botao-entrar" class="botao" disabled>Entrar</button>
         </div>
     </dialog>
 
-    <!-- Ordem importa: cada arquivo usa o que os anteriores definiram -->
+    <!-- Ordem importa -->
     <script src="js/mensagens.js"></script>
     <script src="js/captura-foto.js"></script>
+    <script src="js/mostrar-senha.js"></script>
     <script src="js/login.js"></script>
 </body>
 </html>

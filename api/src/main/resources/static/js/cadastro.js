@@ -1,4 +1,7 @@
+// Mesmo mínimo do CadastroRequest (Java): alterar nos dois
 const TAMANHO_MINIMO_SENHA = 6;
+
+// Mesma origem: o próprio Spring serve esta página e a API
 const URL_CADASTRO = "/usuarios";
 
 const TEXTO_BOTAO = "Cadastrar";
@@ -9,6 +12,16 @@ const botaoCadastrar = document.getElementById("botao-cadastrar");
 const divErroCadastro = document.getElementById("erro-cadastro");
 const divSucessoCadastro = document.getElementById("sucesso-cadastro");
 
+// Cartão de cadastro concluído (aparece no lugar do formulário)
+const cabecalhoCadastro = document.getElementById("cabecalho-cadastro");
+const cartaoConcluido = document.getElementById("cadastro-concluido");
+const tituloConcluido = document.getElementById("titulo-concluido");
+const concluidoNome = document.getElementById("concluido-nome");
+const concluidoCargo = document.getElementById("concluido-cargo");
+const concluidoSelo = document.getElementById("concluido-selo");
+const concluidoNivelTexto = document.getElementById("concluido-nivel-texto");
+const botaoNovoCadastro = document.getElementById("botao-novo-cadastro");
+
 const campos = {
     nome: document.getElementById("nome"),
     email: document.getElementById("email"),
@@ -16,7 +29,7 @@ const campos = {
     confirmarSenha: document.getElementById("confirmar-senha"),
 };
 
-let enviando = false;
+let enviando = false; // true enquanto a requisição está em andamento (evita duplo envio)
 
 // ---------- Mensagens na tela ----------
 
@@ -67,6 +80,7 @@ function validarFormulario() {
         erros.confirmarSenha = "As senhas não coincidem.";
     }
 
+    // Mostra ou limpa a mensagem de cada campo
     for (const nome in campos) {
         if (erros[nome]) {
             mostrarErroCampo(campos[nome], erros[nome]);
@@ -75,6 +89,7 @@ function validarFormulario() {
         }
     }
 
+    // Leva o cursor para o primeiro campo com erro
     const primeiroComErro = Object.keys(erros)[0];
     if (primeiroComErro) {
         campos[primeiroComErro].focus();
@@ -85,6 +100,7 @@ function validarFormulario() {
 
 // ---------- Envio ----------
 
+/** Liga/desliga o estado "Cadastrando..." no botão. */
 function definirEnviando(ativo) {
     enviando = ativo;
     botaoCadastrar.textContent = ativo ? TEXTO_BOTAO_ENVIANDO : TEXTO_BOTAO;
@@ -134,18 +150,39 @@ async function enviarCadastro() {
             mostrarErroGeral(mensagemDoErro(corpo?.erro));
         }
     } finally {
-        definirEnviando(false);
+        definirEnviando(false); // sempre volta ao normal, com sucesso ou erro
     }
 }
 
 function cadastroConcluido(usuario) {
-    mostrarSucesso(
-        `Cadastro realizado, ${usuario.nome}! ` +
-        `Você entrou como ${usuario.cargo} (nível ${usuario.nivel_acesso}).`
-    );
+    concluidoNome.textContent = usuario.nome;
+    concluidoCargo.textContent = usuario.cargo;
+    concluidoSelo.textContent = usuario.nivel_acesso;
+    concluidoSelo.dataset.nivel = usuario.nivel_acesso; // cor do selo pelo CSS
+    concluidoNivelTexto.textContent = `Nível ${usuario.nivel_acesso}`;
+
     formulario.reset();
     limparFoto();
-    divSucessoCadastro.scrollIntoView({ behavior: "smooth" });
+
+    // Esconde o formulário e mostra o cartão no lugar
+    cabecalhoCadastro.hidden = true;
+    formulario.hidden = true;
+    cartaoConcluido.hidden = false;
+    window.scrollTo(0, 0);
+    tituloConcluido.focus(); // o leitor de tela anuncia "Cadastro criado"
+}
+
+function novoCadastro() {
+    cartaoConcluido.hidden = true;
+    concluidoNome.textContent = "";
+    concluidoCargo.textContent = "";
+    concluidoSelo.textContent = "";
+    delete concluidoSelo.dataset.nivel;
+    concluidoNivelTexto.textContent = "";
+
+    cabecalhoCadastro.hidden = false;
+    formulario.hidden = false;
+    campos.nome.focus();
 }
 
 // ---------- Eventos ----------
@@ -162,8 +199,9 @@ for (const nome in campos) {
 }
 
 formulario.addEventListener("submit", (evento) => {
-    evento.preventDefault();
+    evento.preventDefault(); // impede o navegador de recarregar a página
 
+    // Defesas: duplo envio
     if (enviando || obterFoto() === null) {
         return;
     }
@@ -172,3 +210,5 @@ formulario.addEventListener("submit", (evento) => {
     }
     enviarCadastro();
 });
+
+botaoNovoCadastro.addEventListener("click", novoCadastro);

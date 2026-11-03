@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 900" preserveAspectRatio="xMidYMax slice">
+  <!-- Talhões (lavouras vistas de cima) e um rio. O degradê azul por cima vem do estilo.css -->
+  <rect width="520" height="900" fill="#13263a"/>
+  <g transform="rotate(-14 260 620)">
+    <path d="M-60 420L120 400L140 560L-40 590Z" fill="#2c5a4a"/>
+    <path d="M130 398L300 380L318 520L148 548Z" fill="#3e6b3f"/>
+    <path d="M310 378L520 356L540 500L328 520Z" fill="#5b6f3a"/>
+    <path d="M520 354L640 342L660 480L540 498Z" fill="#2c5a4a"/>
+    <path d="M-38 598L150 556L168 700L-20 740Z" fill="#4d6b44"/>
+    <path d="M158 554L330 528L352 668L176 698Z" fill="#284e46"/>
+    <path d="M340 526L548 506L570 640L362 666Z" fill="#3e6b3f"/>
+    <path d="M-18 748L178 706L196 860L0 900Z" fill="#284e46"/>
+    <path d="M186 704L364 674L388 830L206 858Z" fill="#5b6f3a"/>
+    <path d="M372 672L580 648L604 800L396 828Z" fill="#2c5a4a"/>
+    <path d="M0 910L200 868L220 1020L20 1060Z" fill="#3e6b3f"/>
+    <path d="M210 866L396 836L420 990L232 1018Z" fill="#284e46"/>
+    <path d="M-80 640C40 610 120 660 220 630C320 600 380 640 600 590" fill="none" stroke="#4fa3b0" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -9,7 +9,10 @@ Legenda da coluna **OK?**: ✅ bateu com o esperado · ❌ divergiu (descrever e
 
 Senha de todos os usuários de teste: `senha123` (anotada aqui de propósito: a Parte 7 confere que ela **não** aparece nos logs).
 "Foto válida" = rosto de frente, expressão neutra e boa luz.
+
 > obs: confira se a senha bate com a gerada no .sh, se não, troque aqui.
+
+> Testes feitos antes da reformulação visual do front (nov/2026). O comportamento é o mesmo; mudaram só textos e aparência (ex.: “Cancelar” agora é “Voltar ao email e senha”).
 
 ### Usuários de teste (criados na Parte 0, nesta ordem, para os ids baterem)
 

@@ -7,6 +7,8 @@
 
 Legenda da coluna **OK?**: ✅ bateu com o esperado · ❌ divergiu (descrever em Observações)
 
+> Testes feitos antes da reformulação visual do front (nov/2026). O comportamento é o mesmo; mudaram só textos e aparência (ex.: “Cancelar” agora é “Voltar ao email e senha”).
+
 ---
 
 ## Parte 0 — Preparação

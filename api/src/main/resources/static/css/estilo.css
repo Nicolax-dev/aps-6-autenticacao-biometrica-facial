@@ -1,152 +1,1134 @@
-/* Estilo único do sistema (cadastro e login) */
+/* Estilo único do sistema (início, cadastro e login) */
+
+/* ---------- Cores e medidas ---------- */
+
+:root {
+    /* base */
+    --tinta: #13263a;          /* azul institucional: barra do topo, painel lateral, textos */
+    --tinta-2: #1b2e42;        /* fundo da câmera */
+    --tinta-linha: #2f4a63;    /* divisórias sobre o azul */
+    --texto-sobre-tinta: #a9b8c7;
+    --nevoa: #eef1f4;          /* fundo das páginas */
+    --branco: #ffffff;
+    --linha: #d3dae1;
+    --linha-forte: #c3cdd7;
+    --texto-2: #4d5e6e;
+    --texto-3: #3c4d5d;
+
+    /* destaque: verde-azulado de água */
+    --agua: #0b6e75;
+    --agua-escura: #08555b;
+    --agua-clara: #cde7e8;
+
+    /* uma cor por nível de acesso (sempre acompanhada do número escrito) */
+    --nivel-1: #0b6e75;
+    --nivel-2: #9a5b00;
+    --nivel-3: #a11d2b;
+    --bloqueado: #6b7b8a;
+
+    /* mensagens */
+    --erro: #b42318;
+    --erro-fundo: #fbeae8;
+    --erro-texto: #8a1c12;
+    --sucesso-fundo: #e3f2f1;
+    --sucesso-texto: #08555b;
+
+    /* verde de "deu certo" (cartão de cadastro concluído) */
+    --verde: #1e7b45;
+    --verde-escuro: #17643a;
+    --verde-fundo: #e7f4ec;
+    --verde-borda: #a8d5b8;
+    --verde-texto: #14532d;
+    --verde-texto-2: #1f5f38;
+
+    --desabilitado: #d3dae1;
+    --desabilitado-texto: #5f6f7e;
+
+    --raio: 8px;
+    --raio-grande: 12px;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
-    padding: 24px 16px;
-    font-family: system-ui, sans-serif;
-    background: #eef2ef;
-    color: #1f2a24;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    /* Curvas de nível bem leves sobre o fundo claro (img/curvas-nivel.svg) */
+    background: var(--nevoa) url("../img/curvas-nivel.svg") center / cover no-repeat;
+    background-attachment: fixed;
+    color: var(--tinta);
 }
 
-.cartao {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+h1,
+h2,
+h3,
+p {
+    margin: 0;
 }
 
-h1 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    color: #2e6b45;
-}
-
-.acoes {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-.botao {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 6px;
-    background: #2e6b45;
-    color: #ffffff;
-    font-size: 1rem;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.botao:disabled {
-    background: #a9b8ae;
-    cursor: not-allowed;
-}
-
-/* ---------- Formulário ---------- */
-
-.campo {
-    margin-bottom: 16px;
-}
-
-.campo label {
-    display: block;
-    margin-bottom: 4px;
+a {
+    color: var(--agua);
     font-weight: 600;
 }
 
-.campo input {
-    width: 100%;
-    box-sizing: border-box; /* a largura inclui borda e espaçamento interno: não estoura o cartão */
-    padding: 8px 10px;
-    border: 1px solid #b8c4bc;
-    border-radius: 6px;
-    font-size: 1rem;
+a:hover {
+    color: var(--agua-escura);
 }
 
-.campo input.invalido {
-    border-color: #c0392b;
+:focus-visible {
+    outline: 3px solid var(--agua);
+    outline-offset: 2px;
 }
-
-.erro-campo {
-    display: block;
-    margin-top: 4px;
-    color: #c0392b;
-    font-size: 0.85rem;
-}
-
-/* ---------- Utilitário ---------- */
 
 /* Garante que o atributo hidden esconda o elemento mesmo quando outra regra define "display" */
 [hidden] {
     display: none !important;
 }
 
-/* ---------- Captura de foto ---------- */
-
-.captura-foto {
-    padding: 12px;
-    border: 1px dashed #b8c4bc;
-    border-radius: 6px;
-    text-align: center;
+.icone {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.dica {
-    margin: 0 0 12px;
-    font-size: 0.9rem;
-    color: #4a5a50;
+/* ---------- Marca (logo + nome) ---------- */
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--branco);
+    text-decoration: none;
 }
 
-.captura-foto video,
-.captura-foto img {
-    display: block;
-    width: 100%;
-    border-radius: 6px;
-    background: #000000;
+.marca svg {
+    flex: none;
 }
 
-/* Vídeo ao vivo espelhado (como um espelho). A foto capturada sai sem espelho. */
-#video-camera {
-    transform: scaleX(-1);
+.marca-textos {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
 }
 
-.captura-foto .acoes {
+.marca-nome {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.marca-sub {
+    font-size: 13px;
+    color: var(--texto-sobre-tinta);
+}
+
+/* ---------- Botões ---------- */
+
+.botao {
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    margin-top: 12px;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: var(--raio);
+    background: var(--agua);
+    color: var(--branco);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background: var(--agua-escura);
+    color: var(--branco);
+}
+
+.botao:disabled,
+.botao:disabled:hover {
+    background: var(--desabilitado);
+    color: var(--desabilitado-texto);
+    cursor: not-allowed;
+}
+
+.botao.escuro {
+    background: var(--tinta);
+}
+
+.botao.escuro:hover {
+    background: #0a1826;
 }
 
 .botao.secundario {
-    background: #ffffff;
-    color: #2e6b45;
-    border: 1px solid #2e6b45;
+    background: var(--branco);
+    color: var(--tinta);
+    border: 1.5px solid var(--linha-forte);
+    font-weight: 600;
+}
+
+.botao.secundario:hover {
+    border-color: var(--texto-2);
 }
 
 .botao.secundario:disabled {
-    background: #ffffff;
-    color: #a9b8ae;
-    border-color: #a9b8ae;
+    background: var(--branco);
+    color: var(--desabilitado-texto);
+    border-color: var(--desabilitado);
 }
 
-/* ---------- Erro geral (câmera, servidor, rede) ---------- */
+.botao.largo {
+    width: 100%;
+}
+
+/* Botão "Voltar ao email e senha" do popup da foto: contorno vermelho */
+.botao.voltar {
+    padding: 0 20px 0 16px;
+    background: var(--branco);
+    color: var(--erro);
+    border: 2px solid var(--erro);
+}
+
+.botao.voltar:hover {
+    background: var(--erro-fundo);
+    color: var(--erro);
+}
+
+.botao.voltar:disabled,
+.botao.voltar:disabled:hover {
+    background: var(--branco);
+    color: var(--desabilitado-texto);
+    border-color: var(--desabilitado);
+}
+
+/* Botão verde de sucesso ("Entrar agora") */
+.botao.sucesso-botao {
+    background: var(--verde);
+}
+
+.botao.sucesso-botao:hover {
+    background: var(--verde-escuro);
+}
+
+/* Botão branco sobre a barra do topo (Sair); o ícone fica vermelho */
+.botao.claro {
+    min-height: 40px;
+    padding: 0 16px;
+    background: var(--branco);
+    color: var(--tinta);
+    font-size: 14px;
+}
+
+.botao.claro .icone {
+    width: 18px;
+    height: 18px;
+    color: var(--erro);
+}
+
+.botao.claro:hover {
+    background: #e6ecf2;
+    color: var(--tinta);
+}
+
+.botao.claro:focus-visible {
+    outline-color: var(--branco);
+}
+
+/* ---------- Formulário ---------- */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.campo label,
+.rotulo {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.campo input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1.5px solid var(--linha-forte);
+    border-radius: var(--raio);
+    background: var(--branco);
+    color: var(--tinta);
+    font: inherit;
+    font-size: 16px;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: var(--agua);
+    box-shadow: 0 0 0 3px var(--agua-clara);
+}
+
+.campo input.invalido {
+    border-color: var(--erro);
+}
+
+.campo input.invalido:focus {
+    box-shadow: 0 0 0 3px #f5cfca;
+}
+
+.ajuda-campo {
+    font-size: 14px;
+    color: var(--texto-2);
+}
+
+.erro-campo {
+    display: block;
+    font-size: 14px;
+    color: var(--erro);
+}
+
+.erro-campo:empty {
+    display: none;
+}
+
+/* Campo de senha com o botão de mostrar/ocultar */
+.campo-senha {
+    position: relative;
+}
+
+.campo-senha input {
+    padding-right: 52px;
+}
+
+.botao-mostrar-senha {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--texto-2);
+    cursor: pointer;
+}
+
+.botao-mostrar-senha:hover {
+    color: var(--tinta);
+}
+
+/* Mostra o olho aberto ou fechado conforme o estado */
+.botao-mostrar-senha .olho-fechado,
+.botao-mostrar-senha[aria-pressed="true"] .olho-aberto {
+    display: none;
+}
+
+.botao-mostrar-senha[aria-pressed="true"] .olho-fechado {
+    display: block;
+}
+
+.grade-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+/* ---------- Mensagens (erro geral e sucesso) ---------- */
+
+.erro-geral,
+.sucesso {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--raio);
+    font-size: 15px;
+    line-height: 1.45;
+}
 
 .erro-geral {
-    margin-bottom: 16px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    background: #fdecea;
-    color: #c0392b;
+    background: var(--erro-fundo);
+    color: var(--erro-texto);
 }
 
-/* ---------- Sucesso ---------- */
-
 .sucesso {
-    margin-bottom: 16px;
-    padding: 10px 12px;
+    background: var(--sucesso-fundo);
+    color: var(--sucesso-texto);
+    font-weight: 600;
+}
+
+/* Ícone desenhado pelo CSS: a mensagem é posta pelo JavaScript com textContent */
+.erro-geral::before,
+.sucesso::before {
+    content: "";
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+}
+
+.erro-geral::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b42318' stroke-width='2.5' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v6M12 16.5v.5'/%3E%3C/svg%3E");
+}
+
+.sucesso::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2308555b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12.5l3 3 5-6'/%3E%3C/svg%3E");
+}
+
+/* ---------- Layout dividido: início e login ---------- */
+
+.acesso {
+    display: flex;
+    min-height: 100vh;
+}
+
+.painel-lateral {
+    flex: 0 0 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 56px 64px;
+    /* Talhões vistos de cima (img/talhoes.svg), escurecendo para o topo para o texto ficar legível */
+    background:
+        linear-gradient(to bottom,
+            var(--tinta) 0%,
+            rgba(19, 38, 58, 0.96) 38%,
+            rgba(19, 38, 58, 0.55) 75%,
+            rgba(19, 38, 58, 0.35) 100%),
+        url("../img/talhoes.svg") center bottom / cover no-repeat,
+        var(--tinta);
+    color: #e6ecf2;
+}
+
+/* Sobre a parte de baixo do painel (onde aparecem os talhões), o texto ganha mais contraste */
+.painel-lateral .nota-ficticia {
+    color: #e6ecf2;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.painel-lateral.largo {
+    flex-basis: 50%;
+    padding: 56px 72px;
+}
+
+.painel-titulo {
+    font-size: 34px;
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--branco);
+}
+
+.painel-lateral.largo .painel-titulo {
+    max-width: 560px;
+    font-size: 46px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.painel-meio {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.nota-ficticia {
+    font-size: 13px;
+    color: #8496a8;
+}
+
+.area-principal {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+}
+
+.bloco-form {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.cabecalho-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.etapa-atual {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--agua);
+}
+
+.titulo-pagina {
+    font-size: 36px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.texto-apoio {
+    font-size: 16px;
+    color: var(--texto-2);
+}
+
+.rodape-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 24px;
+    border-top: 1px solid var(--linha);
+    font-size: 15px;
+    color: var(--texto-2);
+}
+
+/* ---------- Etapas do login (painel lateral) ---------- */
+
+.etapas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.etapa {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.etapa-numero {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1.5px solid #5d7286;
+    color: var(--texto-sobre-tinta);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.etapa-numero .icone {
+    display: none;
+    width: 16px;
+    height: 16px;
+    stroke-width: 3;
+}
+
+.etapa-textos {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+}
+
+.etapa-nome {
+    font-size: 16px;
+    font-weight: 600;
+    color: #c9d4df;
+}
+
+.etapa-descricao {
+    font-size: 14px;
+    color: var(--texto-sobre-tinta);
+}
+
+/* Etapa em andamento: número cheio, em branco */
+.etapa-1 .etapa-numero,
+body:has(#popup-foto[open]) .etapa-2 .etapa-numero {
+    border-color: var(--branco);
+    background: var(--branco);
+    color: var(--tinta);
+}
+
+.etapa-1 .etapa-nome,
+body:has(#popup-foto[open]) .etapa-2 .etapa-nome {
+    color: var(--branco);
+}
+
+/* Com o popup da foto aberto, a etapa 1 aparece como concluída */
+body:has(#popup-foto[open]) .etapa-1 .etapa-numero {
+    border-color: var(--agua);
+    background: var(--agua);
+}
+
+body:has(#popup-foto[open]) .etapa-1 .etapa-numero .icone {
+    display: block;
+    color: var(--branco);
+}
+
+body:has(#popup-foto[open]) .etapa-1 .etapa-numero span,
+body:has(#popup-foto[open]) .etapa-2 .etapa-numero .icone {
+    display: none;
+}
+
+body:has(#popup-foto[open]) .etapa-1 .etapa-nome {
+    color: #c9d4df;
+}
+
+/* ---------- Página inicial ---------- */
+
+.tabela-niveis {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--tinta-linha);
+}
+
+.tabela-niveis li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--tinta-linha);
+}
+
+.tabela-niveis .cargo {
+    flex: 1;
+    font-weight: 600;
+    color: var(--branco);
+}
+
+.tabela-niveis .quem {
+    font-size: 15px;
+    color: var(--texto-sobre-tinta);
+    text-align: right;
+}
+
+.opcoes {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.opcoes h2 {
+    margin-bottom: 8px;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.opcao {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    border-radius: var(--raio-grande);
+    border: 1.5px solid var(--linha-forte);
+    background: var(--branco);
+    color: var(--tinta);
+    text-decoration: none;
+}
+
+.opcao:hover {
+    color: var(--tinta);
+    border-color: var(--texto-2);
+}
+
+.opcao.principal {
+    border-color: var(--agua);
+    background: var(--agua);
+    color: var(--branco);
+}
+
+.opcao.principal:hover {
+    border-color: var(--agua-escura);
+    background: var(--agua-escura);
+    color: var(--branco);
+}
+
+.opcao-textos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.opcao-nome {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.opcao-descricao {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--texto-2);
+}
+
+.opcao.principal .opcao-descricao {
+    color: #d5ecec;
+}
+
+.opcoes .observacao {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--texto-2);
+}
+
+/* ---------- Selo do nível (quadrado com o número) ---------- */
+
+.selo-nivel {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: var(--cor-nivel, var(--nivel-1));
+    color: var(--branco);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+[data-nivel="1"] { --cor-nivel: var(--nivel-1); }
+[data-nivel="2"] { --cor-nivel: var(--nivel-2); }
+[data-nivel="3"] { --cor-nivel: var(--nivel-3); }
+
+/* ---------- Barra do topo (cadastro e tela logada) ---------- */
+
+.topo {
+    /* Degradê do azul-escuro até uma cor de destaque: verde-água no cadastro... */
+    --cor-topo: var(--agua);
+    background: linear-gradient(90deg, var(--tinta) 0%, var(--tinta) 38%, var(--cor-topo) 100%);
+    color: var(--branco);
+}
+
+/* ...e, na tela logada, a cor do nível de quem entrou (data-nivel no #tela-resultado, posto pelo login.js) */
+#tela-resultado[data-nivel] .topo {
+    --cor-topo: var(--cor-nivel);
+}
+
+/* Link do topo ("Já tenho cadastro"): botão branco
+   (:not(.marca): o logo também é um link, mas fica sem fundo) */
+.topo-conteudo > a:not(.marca) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: var(--raio);
+    background: var(--branco);
+    color: var(--agua);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.topo-conteudo > a:not(.marca) .icone {
+    width: 18px;
+    height: 18px;
+}
+
+.topo-conteudo > a:not(.marca):hover {
+    background: #e6ecf2;
+    color: var(--agua-escura);
+}
+
+.topo-conteudo {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.topo a {
+    color: var(--branco);
+}
+
+.topo a:focus-visible {
+    outline-color: var(--branco);
+}
+
+.topo-usuario {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.usuario-nome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Inicial num círculo branco, com a letra na cor do nível */
+.usuario-inicial {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--branco);
+    color: var(--cor-nivel, var(--tinta));
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Nome em cima, cargo e nível embaixo */
+.usuario-textos {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.texto-nome {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--branco);
+}
+
+.usuario-cargo {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- Cadastro ---------- */
+
+.pagina-estreita {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+}
+
+.pagina-estreita .cabecalho-form {
+    margin-bottom: 28px;
+}
+
+.cartao-form {
+    padding: 32px;
+    border: 1px solid var(--linha);
+    border-radius: 14px;
+    background: var(--branco);
+    gap: 22px;
+}
+
+.envio {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 6px;
+}
+
+.envio .dica-botao {
+    font-size: 14px;
+    color: var(--texto-2);
+    text-align: center;
+}
+
+/* Com a foto tirada, a dica do botão some */
+form:has(#preview-foto:not([hidden])) .dica-botao {
+    display: none;
+}
+
+/* ---------- Cadastro concluído (cartão que substitui o formulário) ---------- */
+
+.cartao-concluido {
+    overflow: hidden;
+    border: 1px solid var(--linha);
+    border-radius: 14px;
+    background: var(--branco);
+}
+
+.concluido-topo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 44px 32px 36px;
+    border-bottom: 1.5px solid var(--verde-borda);
+    background: var(--verde-fundo);
+    text-align: center;
+}
+
+.concluido-icone {
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--verde);
+    color: var(--branco);
+}
+
+.concluido-icone .icone {
+    width: 38px;
+    height: 38px;
+    stroke-width: 2.6;
+}
+
+#titulo-concluido {
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--verde-texto);
+}
+
+#titulo-concluido:focus {
+    outline: none;
+}
+
+.concluido-topo p {
+    max-width: 440px;
+    font-size: 17px;
+    color: var(--verde-texto-2);
+}
+
+.concluido-corpo {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 28px 32px 32px;
+}
+
+.concluido-dados {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.concluido-dados div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border: 1px solid #e1e6eb;
+    border-radius: 10px;
+}
+
+.concluido-dados dt {
+    font-size: 13px;
+    color: var(--texto-2);
+}
+
+.concluido-dados dd {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.concluido-dados .selo-nivel {
+    width: 24px;
+    height: 24px;
     border-radius: 6px;
-    background: #e6f4ea;
-    color: #2e6b45;
+    font-size: 13px;
+}
+
+.concluido-orientacao {
+    font-size: 15px;
+    color: var(--texto-3);
+}
+
+.concluido-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ---------- Captura de foto ---------- */
+
+.captura-foto {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Estado inicial (câmera desligada) */
+.captura-vazia {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border: 1.5px dashed #9aa8b5;
+    border-radius: 10px;
+    background: #f6f8fa;
+}
+
+.silhueta {
+    flex: none;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #e1e6eb;
+    color: var(--bloqueado);
+}
+
+.silhueta .icone {
+    width: 48px;
+    height: 48px;
+    stroke-width: 1.5;
+}
+
+.dica {
+    font-size: 15px;
+    color: var(--texto-3);
+}
+
+/* Some o estado inicial quando o vídeo ou a foto aparecem */
+.captura-foto:has(.visor > :is(video, img):not([hidden])) .captura-vazia {
+    display: none;
+}
+
+/* Área do vídeo/foto: só existe na tela quando um dos dois aparece */
+.visor {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--raio-grande);
+    background: var(--tinta-2);
+}
+
+.visor:not(:has(> :is(video, img):not([hidden]))) {
+    display: none;
+}
+
+.visor video,
+.visor img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+/* Vídeo ao vivo e foto tirada aparecem espelhados (como um espelho), para a imagem não "virar"
+   na hora da foto. É só na tela: a foto enviada ao servidor continua sem espelho. */
+#video-camera,
+#preview-foto {
+    transform: scaleX(-1);
+}
+
+/* Moldura oval: aparece só com a câmera ligada */
+.moldura {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.visor:has(> video:not([hidden])) .moldura {
+    display: block;
+}
+
+.moldura svg {
+    width: 100%;
+    height: 100%;
+}
+
+.moldura-legenda {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 14px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--branco);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Varredura na moldura (só visual, enquanto a câmera está ligada) ---------- */
+
+/* Linha de luz subindo e descendo, recortada no formato da moldura oval */
+.varredura {
+    display: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: ellipse(20% 34% at 50% 50%); /* mesmo oval do SVG da moldura (80x102 em 400x300) */
+}
+
+.visor:has(> video:not([hidden])) .varredura {
+    display: block;
+}
+
+.varredura-linha {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 16%;
+    height: 24px;
+    background: linear-gradient(to bottom, rgba(127, 208, 212, 0), rgba(127, 208, 212, 0.35) 85%, rgba(255, 255, 255, 0.95));
+    animation: varrer 2.6s ease-in-out infinite;
+}
+
+@keyframes varrer {
+    0%, 100% { top: 16%; }
+    50%      { top: 78%; }
+}
+
+/* Moldura em verde-água contínuo, combinando com a varredura */
+.moldura ellipse {
+    stroke: #7fd0d4;
+    stroke-dasharray: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .varredura-linha {
+        animation: none;
+        top: 47%;
+    }
+}
+
+.captura-foto .acoes {
+    display: flex;
+    gap: 12px;
+}
+
+.captura-foto .acoes .botao {
+    flex: 1;
 }
 
 /* ---------- Popup da foto (login) ---------- */
@@ -154,78 +1136,522 @@ h1 {
 /* <dialog>: o navegador já centraliza e coloca por cima da página */
 .popup {
     width: calc(100% - 32px);
-    max-width: 440px;
-    box-sizing: border-box;
-    padding: 24px;
+    max-width: 520px;
+    max-height: calc(100vh - 32px);
+    padding: 32px;
     border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    color: #1f2a24;
+    border-radius: 16px;
+    background: var(--branco);
+    color: var(--tinta);
+    box-shadow: 0 24px 60px rgba(10, 22, 35, 0.35);
+}
+
+.popup[open] {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 /* Fundo escurecido atrás do popup (existe só quando aberto com showModal) */
 .popup::backdrop {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(10, 22, 35, 0.62);
 }
 
 .popup h2 {
-    margin-top: 0;
-    font-size: 1.25rem;
-    color: #2e6b45;
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.01em;
 }
 
-.popup .erro-geral {
-    margin: 16px 0 0;
+.popup .cabecalho-form p {
+    font-size: 15px;
+    color: var(--texto-2);
+}
+
+.popup .captura-vazia {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 20px;
 }
 
 .popup > .acoes {
-    justify-content: flex-end;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e1e6eb;
 }
 
-/* ---------- Resultado do login ---------- */
+/* ---------- Tela logada ---------- */
 
-.subtitulo {
-    margin: 24px 0 8px;
-    font-size: 1.1rem;
+/* Faixa escura com talhões logo abaixo do topo; o cartão de boas-vindas "flutua" sobre ela */
+.boas-vindas {
+    position: relative;
+    padding: 40px 32px 0;
+}
+
+.boas-vindas::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 170px;
+    background:
+        linear-gradient(to bottom, rgba(19, 38, 58, 0.9), rgba(19, 38, 58, 0.45)),
+        url("../img/talhoes.svg") center 80% / cover no-repeat,
+        var(--tinta);
+}
+
+/* Cartão branco com a saudação e o medidor; a borda de cima tem a cor do nível */
+.boas-vindas-conteudo {
+    position: relative;
+    max-width: 976px;
+    margin: 0 auto;
+    padding: 36px 40px;
+    border-top: 5px solid var(--cor-nivel, var(--agua));
+    border-radius: 18px;
+    background: var(--branco);
+    box-shadow: 0 18px 40px rgba(10, 22, 35, 0.18);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.boas-vindas-textos {
+    flex: 1 1 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#saudacao {
+    font-size: 40px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+#saudacao:focus {
+    outline: none;
+}
+
+.boas-vindas-textos p {
+    font-size: 17px;
+    color: var(--texto-2);
+}
+
+.boas-vindas-textos strong {
+    color: var(--tinta);
+}
+
+/* Medidor do nível: três degraus; o CSS pinta até o nível em data-nivel */
+.medidor {
+    flex: 0 1 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.medidor-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto-2);
+}
+
+.degraus {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    align-items: end;
+}
+
+.degrau {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    --cor-degrau: var(--bloqueado);
+}
+
+.degrau-barra {
+    height: calc(14px + var(--altura) * 10px);
+    border: 1.5px dashed #9aa8b5;
+    border-radius: 4px;
+    background: var(--branco);
+}
+
+.degrau-1 { --altura: 1; }
+.degrau-2 { --altura: 2; }
+.degrau-3 { --altura: 3; }
+
+.degrau-nivel {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cor-degrau);
+}
+
+.degrau-cargo {
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--texto-2);
+}
+
+#tela-resultado:is([data-nivel="1"], [data-nivel="2"], [data-nivel="3"]) .degrau-1 { --cor-degrau: var(--nivel-1); }
+#tela-resultado:is([data-nivel="2"], [data-nivel="3"]) .degrau-2 { --cor-degrau: var(--nivel-2); }
+#tela-resultado[data-nivel="3"] .degrau-3 { --cor-degrau: var(--nivel-3); }
+
+#tela-resultado:is([data-nivel="1"], [data-nivel="2"], [data-nivel="3"]) .degrau-1 .degrau-barra,
+#tela-resultado:is([data-nivel="2"], [data-nivel="3"]) .degrau-2 .degrau-barra,
+#tela-resultado[data-nivel="3"] .degrau-3 .degrau-barra {
+    border: 0;
+    background: var(--cor-degrau);
+}
+
+/* Lista de informações, agrupada por nível */
+.conteudo-logado {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 32px 64px;
+}
+
+.grupos-informacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Cada grupo: faixa na cor do nível (data-nivel no grupo, posto pelo login.js) + lista */
+.grupo-nivel {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--raio-grande);
+    box-shadow: 0 2px 10px rgba(19, 38, 58, 0.06);
+}
+
+.grupo-cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-radius: var(--raio-grande) var(--raio-grande) 0 0;
+    background: var(--cor-nivel);
+    color: var(--branco);
+}
+
+.grupo-cabecalho .selo-nivel {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--branco);
+    color: var(--cor-nivel);
+    font-size: 16px;
+}
+
+.grupo-titulos {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.grupo-titulos h2 {
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: var(--branco);
+}
+
+.grupo-quem,
+.grupo-total {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.88);
 }
 
 .lista-informacoes {
     margin: 0;
     padding: 0;
     list-style: none;
+    overflow: hidden;
+    border: 1px solid var(--linha);
+    border-top: 0;
+    border-radius: 0 0 var(--raio-grande) var(--raio-grande);
+    background: var(--branco);
 }
 
 .lista-informacoes li {
-    padding: 12px 0;
-    border-top: 1px solid #dde4df;
-}
-
-.cabecalho-informacao {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 24px;
 }
 
-.cabecalho-informacao h3 {
-    margin: 0;
-    font-size: 1rem;
+.lista-informacoes li + li {
+    border-top: 1px solid #e1e6eb;
+}
+
+.lista-informacoes h3 {
+    font-size: 17px;
+    line-height: 1.35;
+    font-weight: 700;
 }
 
 .lista-informacoes p {
-    margin: 6px 0 0;
-    line-height: 1.4;
-    color: #4a5a50;
+    max-width: 72ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--texto-3);
 }
 
-/* Nível de cada informação (mesma cor para todos os níveis) */
-.etiqueta-nivel {
-    flex-shrink: 0; /* não encolhe quando o título é longo */
-    padding: 2px 8px;
-    border-radius: 12px;
-    background: #e6f4ea;
-    color: #2e6b45;
-    font-size: 0.8rem;
-    font-weight: 600;
-    white-space: nowrap;
+.lista-vazia {
+    padding: 24px;
+    border: 1px dashed var(--linha-forte);
+    border-radius: var(--raio-grande);
+    color: var(--texto-2);
 }
+
+/* ---------- Telas menores ---------- */
+
+@media (max-width: 1000px) {
+    .painel-lateral,
+    .painel-lateral.largo {
+        flex-basis: 42%;
+        padding: 48px 40px;
+    }
+
+    .painel-lateral.largo .painel-titulo {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 760px) {
+    .acesso {
+        flex-direction: column;
+    }
+
+    .painel-lateral,
+    .painel-lateral.largo {
+        flex-basis: auto;
+        gap: 22px;
+        padding: 24px 20px 28px;
+    }
+
+    .painel-meio {
+        gap: 24px;
+    }
+
+    .painel-titulo,
+    .painel-lateral.largo .painel-titulo {
+        font-size: 26px;
+    }
+
+    /* No login, o painel vira só a marca e as duas etapas lado a lado */
+    .painel-lateral.compacto .painel-titulo,
+    .painel-lateral.compacto .nota-ficticia,
+    .painel-lateral.compacto .etapa-descricao {
+        display: none;
+    }
+
+    .painel-lateral.compacto .etapas {
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .painel-lateral.compacto .etapa {
+        flex: 1;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .painel-lateral.compacto .etapa-numero {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .painel-lateral.compacto .etapa-textos {
+        padding-top: 0;
+    }
+
+    .painel-lateral.compacto .etapa-nome {
+        font-size: 14px;
+    }
+
+    .area-principal {
+        align-items: flex-start;
+        padding: 28px 20px 40px;
+    }
+
+    .bloco-form {
+        gap: 24px;
+    }
+
+    .titulo-pagina {
+        font-size: 30px;
+    }
+
+    /* Barra do topo numa linha só: o nome do usuário já aparece na saudação */
+    .topo-conteudo {
+        flex-wrap: nowrap;
+        gap: 12px;
+        padding: 10px 16px;
+    }
+
+    .topo .marca {
+        flex: 1;
+        min-width: 0; /* deixa o nome quebrar linha em vez de empurrar o link para fora */
+        gap: 10px;
+    }
+
+    .topo .marca-nome {
+        font-size: 14px;
+        line-height: 1.25;
+    }
+
+    .topo-conteudo > a,
+    .topo-usuario {
+        flex: none;
+    }
+
+    .usuario-nome {
+        display: none;
+    }
+
+    .pagina-estreita {
+        padding: 28px 16px 48px;
+    }
+
+    .cartao-form {
+        padding: 22px 18px;
+    }
+
+    .grade-2 {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .captura-vazia {
+        align-items: flex-start;
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .silhueta {
+        width: 64px;
+        height: 64px;
+    }
+
+    .silhueta .icone {
+        width: 34px;
+        height: 34px;
+    }
+
+    .boas-vindas {
+        padding: 24px 16px 0;
+    }
+
+    .boas-vindas::before {
+        height: 120px;
+    }
+
+    .boas-vindas-conteudo {
+        padding: 24px 18px;
+        gap: 20px;
+    }
+
+    .grupo-cabecalho {
+        padding: 12px 16px;
+    }
+
+    #saudacao {
+        font-size: 30px;
+    }
+
+    .boas-vindas-textos p {
+        font-size: 15px;
+    }
+
+    .medidor {
+        flex-basis: 100%;
+    }
+
+    .degrau-cargo {
+        display: none;
+    }
+
+    .conteudo-logado {
+        padding: 24px 16px 48px;
+    }
+
+    .grupos-informacoes {
+        gap: 28px;
+    }
+
+    .lista-informacoes li {
+        padding: 18px 16px;
+    }
+
+    .lista-informacoes h3 {
+        font-size: 16px;
+    }
+
+    /* Popup vira uma folha presa embaixo da tela */
+    .popup {
+        width: 100%;
+        max-width: none;
+        max-height: 100dvh;
+        margin: auto 0 0;
+        padding: 24px 20px 28px;
+        border-radius: 18px 18px 0 0;
+    }
+
+    .popup[open] {
+        gap: 18px;
+    }
+
+    .popup h2 {
+        font-size: 24px;
+    }
+
+    /* No celular, "Entrar" fica em cima e "Voltar ao email e senha" embaixo, os dois na largura toda */
+    .popup > .acoes {
+        flex-direction: column-reverse;
+        padding-top: 16px;
+    }
+
+    .popup > .acoes .botao {
+        width: 100%;
+    }
+
+    /* Celular: menos espaço em volta do cartão de cadastro concluído */
+    .concluido-topo {
+        padding: 32px 20px 28px;
+    }
+
+    #titulo-concluido {
+        font-size: 28px;
+    }
+
+    .concluido-corpo {
+        padding: 22px 18px 24px;
+    }
+
+    .concluido-dados {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Painel do login no celular é baixo: os talhões aparecem mais claros */
+    .painel-lateral,
+    .painel-lateral.largo {
+        background:
+            linear-gradient(to bottom, rgba(19, 38, 58, 0.92), rgba(19, 38, 58, 0.7)),
+            url("../img/talhoes.svg") center 70% / cover no-repeat,
+            var(--tinta);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto !important;
+    }
+} 

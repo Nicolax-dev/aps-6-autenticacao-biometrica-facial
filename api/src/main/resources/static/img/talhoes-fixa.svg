@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 76" preserveAspectRatio="xMaxYMid slice">
+  <!-- Faixa de talhões para a barra do topo: some em degradê para a esquerda -->
+  <defs>
+    <linearGradient id="esmaecer" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#13263a" stop-opacity="1"/>
+      <stop offset="0.45" stop-color="#13263a" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#13263a" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="76" fill="#13263a"/>
+  <g transform="rotate(-8 340 40)">
+    <path d="M0 -20L140 -30L150 50L10 60Z" fill="#2c5a4a"/>
+    <path d="M145 -30L290 -40L300 40L155 50Z" fill="#3e6b3f"/>
+    <path d="M295 -40L450 -52L460 30L305 40Z" fill="#5b6f3a"/>
+    <path d="M455 -52L620 -64L630 20L465 30Z" fill="#2c5a4a"/>
+    <path d="M625 -64L760 -74L770 10L635 20Z" fill="#4d6b44"/>
+    <path d="M12 66L155 56L165 136L22 146Z" fill="#284e46"/>
+    <path d="M160 55L305 45L315 125L170 135Z" fill="#4d6b44"/>
+    <path d="M310 44L465 34L475 114L320 124Z" fill="#2c5a4a"/>
+    <path d="M470 33L635 22L645 102L480 112Z" fill="#5b6f3a"/>
+    <path d="M640 21L780 12L790 92L650 101Z" fill="#284e46"/>
+    <path d="M0 70C140 50 240 80 360 56C480 32 570 60 760 30" fill="none" stroke="#4fa3b0" stroke-width="5"/>
+  </g>
+  <rect width="760" height="76" fill="url(#esmaecer)"/>
+</svg>

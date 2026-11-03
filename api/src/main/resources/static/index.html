@@ -4,17 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>APS6 — Acesso Biométrico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800&display=swap">
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
-    <main class="cartao">
-        <h1>Sistema de Acesso Biométrico</h1>
-        <p>Ministério do Meio Ambiente — base de dados de propriedades rurais.</p>
+    <div class="acesso">
+        <aside class="painel-lateral largo">
+            <span class="marca">
+                <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0b6e75"/><path d="M20 9c5 6 8 10.5 8 14.5a8 8 0 0 1-16 0C12 19.5 15 15 20 9z" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M16.5 24.5a3.5 3.5 0 0 0 3.5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span class="marca-textos">
+                    <span class="marca-nome">Ministério do Meio Ambiente</span>
+                    <span class="marca-sub">Base de propriedades rurais</span>
+                </span>
+            </span>
 
-        <div class="acoes">
-            <a href="cadastro.html" class="botao">Cadastrar</a>
-            <a href="login.html" class="botao">Entrar</a>
-        </div>
-    </main>
+            <div class="painel-meio">
+                <h1 class="painel-titulo">Informações sobre o uso de agrotóxicos proibidos, liberadas pelo seu cargo</h1>
+
+                <!-- data-nivel define a cor do selo pelo CSS -->
+                <ul class="tabela-niveis" aria-label="Níveis de acesso">
+                    <li data-nivel="1">
+                        <span class="selo-nivel">1</span>
+                        <span class="cargo">Analista</span>
+                        <span class="quem">Todos os cadastrados</span>
+                    </li>
+                    <li data-nivel="2">
+                        <span class="selo-nivel">2</span>
+                        <span class="cargo">Diretor de Divisão</span>
+                        <span class="quem">Diretores e ministro</span>
+                    </li>
+                    <li data-nivel="3">
+                        <span class="selo-nivel">3</span>
+                        <span class="cargo">Ministro</span>
+                        <span class="quem">Somente o ministro</span>
+                    </li>
+                </ul>
+            </div>
+
+            <p class="nota-ficticia">Projeto acadêmico APS6, UNIP. Todas as informações do banco são fictícias.</p>
+        </aside>
+
+        <main class="area-principal">
+            <div class="opcoes">
+                <h2>Como você quer continuar?</h2>
+
+                <a href="login.html" class="opcao principal">
+                    <span class="opcao-textos">
+                        <span class="opcao-nome">Entrar</span>
+                        <span class="opcao-descricao">Email, senha e foto pela webcam</span>
+                    </span>
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                </a>
+
+                <a href="cadastro.html" class="opcao">
+                    <span class="opcao-textos">
+                        <span class="opcao-nome">Criar cadastro</span>
+                        <span class="opcao-descricao">Você começa como Analista (nível 1)</span>
+                    </span>
+                    <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                </a>
+
+                <p class="observacao">Você vai precisar de uma webcam. Na primeira vez, o navegador pede permissão para usá-la.</p>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

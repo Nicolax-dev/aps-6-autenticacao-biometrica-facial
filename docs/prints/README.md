@@ -1,13 +1,14 @@
 # Prints — evidências do funcionamento
 
-Prints do sistema em funcionamento.
+Prints do item 9 do relatório ("Apresentação do programa em funcionamento").
+Pasta fora do Git: contém o rosto do Nicolas.
 
 > **Sobre as imagens:** esta é a única pasta do repositório com fotos de rosto,
 > e todas mostram apenas o rosto do autor (Nicolas), publicado por decisão própria.
 > As fotos usadas nos testes automatizados continuam fora do Git
 > (`biometria-service/fotos/`), por serem dado biométrico.
 
-- Todos os usuários foram cadastrados pela tela, com o rosto do Nicolas e a senha `123456`.
+- Todos os usuários foram cadastrados pela tela, com o rosto do Nicolas e a senha `123456` ou `SenhaForte123@`.
 - Única foto de arquivo: `img_outraPessoa.jpg`, no print 09 (só a resposta aparece, sem o rosto).
 
 ## Índice

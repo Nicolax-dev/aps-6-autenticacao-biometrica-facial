@@ -27,8 +27,20 @@ const botaoEntrar = document.getElementById("botao-entrar");
 // resultado
 const telaResultado = document.getElementById("tela-resultado");
 const tituloSaudacao = document.getElementById("saudacao");
-const listaInformacoes = document.getElementById("lista-informacoes");
+const textoCargo = document.getElementById("texto-cargo");
+const textoNivel = document.getElementById("texto-nivel");
+const nomeUsuarioTopo = document.getElementById("nome-usuario-topo");
+const cargoUsuarioTopo = document.getElementById("cargo-usuario-topo");
+const inicialUsuario = document.getElementById("inicial-usuario");
+const listaInformacoes = document.getElementById("lista-informacoes"); // recebe um grupo por nível
 const botaoSair = document.getElementById("botao-sair");
+
+// Texto do cabeçalho de cada grupo (só exibição: quem decide o que aparece é a API)
+const QUEM_ACESSA_NIVEL = {
+    1: "Todos os cargos",
+    2: "Diretores de divisão e ministro",
+    3: "Somente o ministro",
+};
 
 let enviando = false;
 
@@ -94,7 +106,7 @@ function lerCredenciais() {
     };
 }
 
-/** POST com JSON. Devolve a resposta, ou null se nem chegou resposta (Java fora do ar, sem rede). */
+// POST com JSON. Devolve a resposta, ou null se nem chegou resposta (Java fora do ar, sem rede).
 async function postarJson(url, dados) {
     try {
         return await fetch(url, {
@@ -200,47 +212,110 @@ function abrirPopup() {
 
 // ---------- Resultado ----------
 
-/** Monta um item da lista: título + etiqueta do nível + conteúdo (tudo com textContent). */
+/** Monta um item da lista: título + conteúdo (tudo com textContent). O nível fica no cabeçalho do grupo. */
 function criarItemInformacao(informacao) {
     const titulo = document.createElement("h3");
     titulo.textContent = informacao.titulo;
-
-    const nivel = document.createElement("span");
-    nivel.className = "etiqueta-nivel";
-    nivel.textContent = `Nível ${informacao.nivel_acesso}`;
-
-    const cabecalho = document.createElement("div");
-    cabecalho.className = "cabecalho-informacao";
-    cabecalho.append(titulo, nivel);
 
     const conteudo = document.createElement("p");
     conteudo.textContent = informacao.conteudo;
 
     const item = document.createElement("li");
-    item.append(cabecalho, conteudo);
+    item.append(titulo, conteudo);
     return item;
+}
+
+// Monta o grupo de um nível
+function criarGrupoNivel(nivel, informacoes) {
+    const selo = document.createElement("span");
+    selo.className = "selo-nivel";
+    selo.setAttribute("aria-hidden", "true");
+    selo.textContent = nivel;
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = `Nível ${nivel}`;
+
+    const quem = document.createElement("span");
+    quem.className = "grupo-quem";
+    quem.textContent = QUEM_ACESSA_NIVEL[nivel] ?? "";
+
+    const titulos = document.createElement("div");
+    titulos.className = "grupo-titulos";
+    titulos.append(titulo, quem);
+
+    const total = document.createElement("span");
+    total.className = "grupo-total";
+    total.textContent = informacoes.length === 1 ? "1 informação" : `${informacoes.length} informações`;
+
+    const cabecalho = document.createElement("div");
+    cabecalho.className = "grupo-cabecalho";
+    cabecalho.append(selo, titulos, total);
+
+    const lista = document.createElement("ul");
+    lista.className = "lista-informacoes";
+    for (const informacao of informacoes) {
+        lista.append(criarItemInformacao(informacao));
+    }
+
+    const grupo = document.createElement("section");
+    grupo.className = "grupo-nivel";
+    grupo.dataset.nivel = nivel; // define a cor do selo pelo CSS
+    grupo.append(cabecalho, lista);
+    return grupo;
+}
+
+// Separa as informações recebidas por nível, do mais restrito (3) ao mais aberto (1).
+function agruparPorNivel(informacoes) {
+    const grupos = new Map();
+    for (const informacao of informacoes) {
+        const nivel = informacao.nivel_acesso;
+        if (!grupos.has(nivel)) {
+            grupos.set(nivel, []);
+        }
+        grupos.get(nivel).push(informacao);
+    }
+    return [...grupos.entries()].sort(([nivelA], [nivelB]) => nivelB - nivelA);
 }
 
 function loginConcluido(usuario) {
     popupFoto.close();
     formLogin.reset();
 
-    tituloSaudacao.textContent =
-        `Olá, ${usuario.nome}! Seu cargo: ${usuario.cargo} (nível ${usuario.nivel_acesso}).`;
+    tituloSaudacao.textContent = `Olá, ${usuario.nome}`;
+    textoCargo.textContent = usuario.cargo;
+    textoNivel.textContent = usuario.nivel_acesso;
+    nomeUsuarioTopo.textContent = usuario.nome;
+    cargoUsuarioTopo.textContent = `${usuario.cargo} · Nível ${usuario.nivel_acesso}`;
+    inicialUsuario.textContent = usuario.nome.trim().charAt(0).toUpperCase();
+    telaResultado.dataset.nivel = usuario.nivel_acesso; // pinta o medidor pelo CSS
 
     listaInformacoes.replaceChildren(); // esvazia a lista
-    for (const informacao of usuario.informacoes) {
-        listaInformacoes.append(criarItemInformacao(informacao));
+    for (const [nivel, informacoes] of agruparPorNivel(usuario.informacoes)) {
+        listaInformacoes.append(criarGrupoNivel(nivel, informacoes));
+    }
+    if (usuario.informacoes.length === 0) {
+        const vazio = document.createElement("p");
+        vazio.className = "lista-vazia";
+        vazio.textContent = "Nenhuma informação cadastrada para o seu nível no momento.";
+        listaInformacoes.append(vazio);
     }
 
     telaLogin.hidden = true;
     telaResultado.hidden = false;
+    window.scrollTo(0, 0);
+    tituloSaudacao.focus();
 }
 
 /** Sair: tira os dados protegidos da página e volta ao formulário. */
 function sair() {
     listaInformacoes.replaceChildren();
     tituloSaudacao.textContent = "";
+    textoCargo.textContent = "";
+    textoNivel.textContent = "";
+    nomeUsuarioTopo.textContent = "";
+    cargoUsuarioTopo.textContent = "";
+    inicialUsuario.textContent = "";
+    delete telaResultado.dataset.nivel;
     telaResultado.hidden = true;
     telaLogin.hidden = false;
     camposLogin.email.focus();
